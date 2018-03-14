@@ -22,9 +22,20 @@ if(document && !document.getElementById('_helium_css_sheet')) {
     clearCSS();
 }
 
+const jsonToCss = (_css) => {
+  let css = '';
+  for(key in _css) {
+  	css += key+':'+_css[key]+';';
+  }
+  return css;
+}
+
 CSS = (rules) => {
-    const className = "class"+Date.now() + parseInt(Math.random() * 99999);
-    document.getElementById('_helium_css_sheet').innerHTML += "."+className+" {"+rules+"}";
+    const className = 'class'+Date.now() + parseInt(Math.random() * 99999);
+    if(typeof rules !== 'string') {
+      rules = jsonToCss(rules);
+    }
+    document.getElementById('_helium_css_sheet').innerHTML += '.'+className+' {'+rules+'}';
     return className;
 }
 

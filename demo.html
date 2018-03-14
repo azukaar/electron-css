@@ -1,0 +1,25 @@
+<body>
+    <script src='index.js'></script>
+    <script>
+        const cssClass = CSS(`
+            color: red;
+        `);
+
+        document.write(`
+            <div class='${cssClass}'>Hello</div>
+            <div class='${cssClass}'>World</div>
+        `);
+
+        const cssClass2 = CSS({
+            color: 'green'
+        });
+
+        const cssClass3 = CSS(`
+            color: green;
+        `);
+
+        document.write(`
+            <div class='${cssClass2}'>!</div>
+        `);
+    </script>   
+</body>
