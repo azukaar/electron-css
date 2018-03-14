@@ -1,0 +1,25 @@
+{
+  "name": "electron-css",
+  "version": "0.0.1",
+  "description": "Easiest, lightest framework agnostic CSS in JS library",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azukaar/electron-css.git"
+  },
+  "keywords": [
+    "css",
+    "css-in-js",
+    "react",
+    "angular"
+  ],
+  "author": "Yann Stepienik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/azukaar/electron-css/issues"
+  },
+  "homepage": "https://github.com/azukaar/electron-css#readme"
+}
