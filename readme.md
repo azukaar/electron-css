@@ -2,12 +2,14 @@
 
 Easiest, lightest framework agnostic CSS in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
 
+JSFIddle : https://jsfiddle.net/69z2wepo/198238/
+
 # React
 
 ```js
 import CSS from 'electron-css';
 
-class myComp extends React.Component {
+class MyComp extends React.Component {
     render() {
         const myClass = CSS({
             color: this.props.color,
@@ -15,7 +17,7 @@ class myComp extends React.Component {
                 color: 'blue'
             }
         });
-        return <div class={myClass}>Hello World !</div>;
+        return <div className={myClass}>Hello World !</div>;
     }
 }
 ```

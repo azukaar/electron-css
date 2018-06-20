@@ -48,7 +48,7 @@ const CSS = (rules) => {
     return className;
 }
 
-if(module && module.exports) {
+if(typeof module !== 'undefined' && module.exports) {
     module.exports = CSS;
 }
 else {
