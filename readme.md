@@ -5,7 +5,7 @@ Easiest, lightest framework agnostic CSS in JS library. Use with React, Angular 
 # React
 
 ```
-import CSS from 'electron-css';
+import * as CSS from 'electron-css';
 
 class myComp extends React.Component {
     render() {

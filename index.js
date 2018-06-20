@@ -30,7 +30,7 @@ const jsonToCss = (_css) => {
   return css;
 }
 
-CSS = (rules) => {
+const CSS = (rules) => {
     const className = 'class'+Date.now() + parseInt(Math.random() * 100000);
     if(typeof rules !== 'string') {
       rules = jsonToCss(rules);
