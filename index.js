@@ -1,4 +1,4 @@
-if(document && !document.getElementById('_electron_css_sheet')) {
+if(typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
     const stylesheet = document.createElement('style');
     stylesheet.id = '_electron_css_sheet';
     document.body.appendChild(stylesheet);
@@ -22,20 +22,29 @@ if(document && !document.getElementById('_electron_css_sheet')) {
     clearCSS();
 }
 
-const jsonToCss = (_css) => {
+const jsonToCss = (_css, className) => {
+  let master = '';
   let css = '';
+
   for(key in _css) {
-  	css += key+':'+_css[key]+';';
+    if (key.match(/^:/)) {
+      master += jsonToCss(_css[key], className+key);
+    } else {
+      css += key+':'+_css[key]+';';
+    }
   }
-  return css;
+
+  return `.${className} {${css}} ${master}`;
 }
 
 const CSS = (rules) => {
     const className = 'class'+Date.now() + parseInt(Math.random() * 100000);
     if(typeof rules !== 'string') {
-      rules = jsonToCss(rules);
+      rules = jsonToCss(rules, className);
+      document.getElementById('_electron_css_sheet').innerHTML += rules;
+    } else {
+        document.getElementById('_electron_css_sheet').innerHTML += '.'+className+' {'+rules+'}';
     }
-    document.getElementById('_electron_css_sheet').innerHTML += '.'+className+' {'+rules+'}';
     return className;
 }
 
