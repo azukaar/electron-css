@@ -1,6 +1,6 @@
-if(document && !document.getElementById('_helium_css_sheet')) {
+if(document && !document.getElementById('_electron_css_sheet')) {
     const stylesheet = document.createElement('style');
-    stylesheet.id = '_helium_css_sheet';
+    stylesheet.id = '_electron_css_sheet';
     document.body.appendChild(stylesheet);
 
     function clearCSS(_i = 0) {
@@ -31,11 +31,11 @@ const jsonToCss = (_css) => {
 }
 
 CSS = (rules) => {
-    const className = 'class'+Date.now() + parseInt(Math.random() * 99999);
+    const className = 'class'+Date.now() + parseInt(Math.random() * 100000);
     if(typeof rules !== 'string') {
       rules = jsonToCss(rules);
     }
-    document.getElementById('_helium_css_sheet').innerHTML += '.'+className+' {'+rules+'}';
+    document.getElementById('_electron_css_sheet').innerHTML += '.'+className+' {'+rules+'}';
     return className;
 }
 
@@ -43,5 +43,5 @@ if(module && module.exports) {
     module.exports = CSS;
 }
 else {
-    document.CSS = CSS;
+    window.CSS = CSS;
 }
