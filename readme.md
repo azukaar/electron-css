@@ -23,7 +23,7 @@ class myComp extends React.Component {
 # JQuery
 
 ```html
-<script src='electron-css/index.js'>
+<script src='electron-css/index.js'></script>
 
 <script>
     const myClass = CSS(`color:red;`);
