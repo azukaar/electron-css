@@ -10,16 +10,23 @@
             <div class='${cssClass}'>World</div>
         `);
 
+        // This one will get GC Because it's not used
         const cssClass2 = CSS({
-            color: 'green'
+            color: 'green',
+            ':hover': {
+                'font-size': '300%'
+            }
         });
 
-        const cssClass3 = CSS(`
-            color: green;
-        `);
+        const cssClass3 = CSS({
+            color: 'green',
+            ':hover': {
+                'font-size': '300%'
+            }
+        });
 
         document.write(`
-            <div class='${cssClass2}'>!</div>
+            <div class='${cssClass3}'>!</div>
         `);
     </script>   
 </body>

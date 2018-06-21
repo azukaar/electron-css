@@ -10,13 +10,14 @@ if(typeof document !== 'undefined' && !document.getElementById('_electron_css_sh
             if(_i > sheet.cssRules.length) _i = 0;
             for (var i=_i; i<_i+10; i++) {
                 if(sheet.cssRules[i]) {
-                    const className = sheet.cssRules[i].selectorText.split('.')[1];
+                    const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0];
+
                     if (document.getElementsByClassName(className).length === 0) {
                         sheet.deleteRule(i);
                     }
                 }
             }
-            setTimeout(() => clearCSS(_i + 10), 5000);  
+            setTimeout(() => clearCSS(_i + 10), 10000);  
         }
     }
     clearCSS();
