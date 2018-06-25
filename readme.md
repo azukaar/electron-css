@@ -2,7 +2,7 @@
 
 Easiest, lightest framework agnostic CSS in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
 
-JSFIddle : https://jsfiddle.net/69z2wepo/199436/
+JSFIddle : https://jsfiddle.net/wrme0pz7/
 
 # React
 
@@ -12,9 +12,9 @@ import CSS from 'electron-css';
 class MyComp extends React.Component {
     render() {
         const myClass = CSS({
-            color: this.props.color,
-            ':hover': {
-                color: 'blue'
+            backgroundColor: this.props.color,
+            onHover: {
+                backgroundColor: 'blue'
             }
         });
 

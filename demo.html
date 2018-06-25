@@ -10,18 +10,10 @@
             <div class='${cssClass}'>World</div>
         `);
 
-        // This one will get GC Because it's not used
-        const cssClass2 = CSS({
-            color: 'green',
-            ':hover': {
-                'font-size': '300%'
-            }
-        });
-
         const cssClass3 = CSS({
             color: 'green',
-            ':hover': {
-                'font-size': '300%'
+            onHover: {
+                fontSize: '300%'
             }
         });
 
