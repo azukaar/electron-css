@@ -1,24 +1,28 @@
 <body>
     <script src='index.js'></script>
     <script>
-        const cssClass = CSS(`
-            color: red;
-        `);
-
-        document.write(`
-            <div class='${cssClass}'>Hello</div>
-            <div class='${cssClass}'>World</div>
-        `);
-
-        const cssClass3 = CSS({
-            color: 'green',
+        const wrapper = CSS({
+            border: '1px solid black',
+            height: '150px',
+            width: '150px',
             onHover: {
-                fontSize: '300%'
+                borderColor: 'pink'
+            }
+        });
+
+        const tester = CSS({
+            fontSize: '150%',
+            [wrapper.onHover]: {
+                color: 'pink'
             }
         });
 
         document.write(`
-            <div class='${cssClass3}'>!</div>
+            <div class='${wrapper}'>
+                <div class='${tester}'>
+                    Hello World !
+                </div>
+            </div>
         `);
     </script>   
 </body>

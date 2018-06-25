@@ -2,7 +2,7 @@
 
 Easiest, lightest framework agnostic CSS in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
 
-JSFIddle : https://jsfiddle.net/wrme0pz7/
+JSFIddle : https://jsfiddle.net/wrme0pz7/4/
 
 # React
 
