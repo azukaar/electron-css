@@ -10,7 +10,7 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
 
   function clearCSS(_i = 0) {
     var sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
-    let nbToIt = Math.floor(sheet.cssRules.length / 3);
+    let nbToIt = Math.floor(sheet.cssRules.length / 2);
     nbToIt = nbToIt < 30 ? 30 : nbToIt;
     nbToIt = nbToIt > 500 ? 500 : nbToIt;
     
