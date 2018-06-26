@@ -73,9 +73,12 @@ const CSS = function (rules) {
   const result = {
     cache: temp + '',
     toString() {
-      if (!document.styleSheets.item('.' + className).cssRules.length) {
-        document.getElementById('_electron_css_sheet').innerHTML += temp;
+    	const stylesheet = document.getElementById('_electron_css_sheet');
+	    const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
+      if (Array.from(sheet.rules).some(r => r.selectorText === '.' + className)) {
+        return className;
       }
+      sheet.insertRule(temp);
       return className;
     }
   };
