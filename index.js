@@ -1,12 +1,31 @@
 const pseudoClassList = [
   'active', 'checked', 'disabled', 'empty', 'enabled', 'focus',
   'hover', 'invalid', 'link', 'read-only', 'required', 'valid', 'visited'
-] 
+];
 
-if(typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
-    const stylesheet = document.createElement('style');
-    stylesheet.id = '_electron_css_sheet';
-    document.body.appendChild(stylesheet);
+if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
+  const stylesheet = document.createElement('style');
+  stylesheet.id = '_electron_css_sheet';
+  document.body.appendChild(stylesheet);
+
+  function clearCSS(_i = 0) {
+    var sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
+
+    if (sheet.cssRules) {
+      if (_i > sheet.cssRules.length) _i = 0;
+      for (var i = _i; i < _i + 75; i++) {
+        if (sheet.cssRules[i]) {
+          const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0];
+
+          if (document.getElementsByClassName(className).length === 0) {
+            sheet.deleteRule(i);
+          }
+        }
+      }
+      setTimeout(() => clearCSS(_i + 75), 5000);
+    }
+  }
+  clearCSS();
 }
 
 function caseConvert(str) {
@@ -19,7 +38,7 @@ const jsonToCss = function (_css, className) {
   let master = '';
   let css = '';
 
-  for(key in _css) {
+  for (key in _css) {
     if (key.match(/^on/)) {
       const eventKey = caseConvert(key.replace(/^on[A-Z]/, function (match) {
         return match.substr(-1).toLowerCase()
@@ -30,42 +49,47 @@ const jsonToCss = function (_css, className) {
       master += key + ' ' + jsonToCss(_css[key], className);
     } else {
       const dashKey = caseConvert(key);
-      css += dashKey+':'+_css[key]+';';
+      css += dashKey + ':' + _css[key] + ';';
     }
   }
 
   return `.${className} {${css}} ${master}`;
 }
 
-const CSS = function(rules) {
-    const className = 'class' + Date.now() + parseInt(Math.random() * 10000);
-    if(typeof rules !== 'string') {
-      rules = jsonToCss(rules, className);
-      document.getElementById('_electron_css_sheet').innerHTML += rules;
-    } else {
-        document.getElementById('_electron_css_sheet').innerHTML += '.'+className+' {'+rules+'}';
-    }
+const CSS = function (rules) {
+  const className = 'class' + Date.now() + parseInt(Math.random() * 10000);
+  let temp = '';
+  if (typeof rules !== 'string') {
+    temp = jsonToCss(rules, className);
+    document.getElementById('_electron_css_sheet').innerHTML += temp;
+  } else {
+    temp = '.' + className + ' {' + rules + '}';
+    document.getElementById('_electron_css_sheet').innerHTML += temp;
+  }
 
-    const result = {
-      toString() {
-        return className;
+  const result = {
+    cache: temp + '',
+    toString() {
+      if (!document.styleSheets.item('.' + className).cssRules.length) {
+        document.getElementById('_electron_css_sheet').innerHTML += temp;
       }
-    };
+      return className;
+    }
+  };
 
-    pseudoClassList.forEach(pc => {
-      let methodName = caseConvert(pc);
-      methodName = methodName.replace(/^[a-z]/, function (match) {
-        return match.toUpperCase()
-      });
-      result['on' + methodName] = '.' + className + ':' + pc;
+  pseudoClassList.forEach(pc => {
+    let methodName = caseConvert(pc);
+    methodName = methodName.replace(/^[a-z]/, function (match) {
+      return match.toUpperCase()
     });
+    result['on' + methodName] = '.' + className + ':' + pc;
+  });
 
-    return result;
+  return result;
 }
 
-if(typeof module !== 'undefined' && module.exports) {
-    module.exports = CSS;
-}
-else {
-    window.CSS = CSS;
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = CSS;
+} else {
+  window.CSS = CSS;
 }
