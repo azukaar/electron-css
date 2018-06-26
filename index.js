@@ -10,10 +10,13 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
 
   function clearCSS(_i = 0) {
     var sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
-
+    let nbToIt = Math.floor(sheet.cssRules.length / 3);
+    nbToIt = nbToIt < 30 ? 30 : nbToIt;
+    nbToIt = nbToIt > 500 ? 500 : nbToIt;
+    
     if (sheet.cssRules) {
       if (_i > sheet.cssRules.length) _i = 0;
-      for (var i = _i; i < _i + 75; i++) {
+      for (var i = _i; i < _i + nbToIt; i++) {
         if (sheet.cssRules[i]) {
           const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0];
 
@@ -22,7 +25,7 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
           }
         }
       }
-      setTimeout(() => clearCSS(_i + 75), 5000);
+      setTimeout(() => clearCSS(_i + nbToIt), 5000);
     }
   }
   clearCSS();
