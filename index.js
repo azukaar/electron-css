@@ -78,7 +78,9 @@ const CSS = function (rules) {
       if (Array.from(sheet.rules).some(r => r.selectorText === '.' + className)) {
         return className;
       }
-      sheet.insertRule(temp);
+      const ruleArray = temp.split('}');
+      ruleArray.pop();
+      ruleArray.forEach(rule => sheet.insertRule(rule));
       return className;
     }
   };
