@@ -113,7 +113,9 @@ class MyComp extends React.Component {
             }
         });
 
-        return <div className={myClass}>Hello World !</div>;
+        return <div className={myClass}>
+            Hello World !
+        </div>;
     }
 }
 ```
@@ -141,8 +143,8 @@ class MyComp extends Blossom.Component {
 }
 
 Blossom.register({
-	name: 'e-mycomp',
-  element: MyComp
+    name: 'e-mycomp',
+    element: MyComp
 })
 ```
 
