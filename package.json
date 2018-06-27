@@ -1,10 +1,22 @@
 {
   "name": "electron-css",
-  "version": "0.3.6",
+  "version": "0.4.2",
   "description": "Easiest, lightest framework agnostic CSS in JS library",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "files": ["dist"],
   "scripts": {
-    "test": "npm run test"
+    "test": "jest",
+    "start": "webpack-serve",
+    "build": "webpack -p",
+    "prepublish": "npm run build; npm run test"
+  },
+  "serve": {
+    "content": [
+      "demo"
+    ]
+  },
+  "jest": {
+    "roots": ["src", "tests"]
   },
   "repository": {
     "type": "git",
@@ -21,5 +33,16 @@
   "bugs": {
     "url": "https://github.com/azukaar/electron-css/issues"
   },
-  "homepage": "https://github.com/azukaar/electron-css#readme"
+  "homepage": "https://github.com/azukaar/electron-css#readme",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.2.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.7.0",
+    "webpack": "^4.12.2"
+  },
+  "dependencies": {
+    "jest": "^23.2.0",
+    "webpack-cli": "^3.0.8"
+  }
 }
