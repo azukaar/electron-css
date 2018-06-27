@@ -1,7 +1,8 @@
 import * as CONSTANTS from '../src/constants';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, jsonToCss, caseConvert, clearCSS} from '../src/index';
+import {jsonToCss, caseConvert, clearCSS} from '../src/index';
+import CSS from '../src/index';
 
 document.body.innerHTML += '<div id="playground"></div>';
 

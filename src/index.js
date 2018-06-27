@@ -95,6 +95,8 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
   clearCSS();
 }
 
-export default CSS;
-export {CSS, jsonToCss, caseConvert, clearCSS};
+if (typeof module != undefined && module.exports) {
+  module.exports = CSS;
+}
+
 window.CSS = CSS;
