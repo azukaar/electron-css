@@ -1,11 +1,14 @@
 {
   "name": "electron-css",
   "version": "0.4.2",
-  "description": "Easiest, lightest framework agnostic CSS in JS library",
+  "description": "Easiest, framework agnostic Style in JS library",
   "main": "dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
+    "test-ci": "jest; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-serve",
     "build": "webpack -p",
     "prepublish": "npm run build; npm run test"
@@ -16,7 +19,10 @@
     ]
   },
   "jest": {
-    "roots": ["src", "tests"]
+    "roots": [
+      "src",
+      "tests"
+    ]
   },
   "repository": {
     "type": "git",
@@ -29,7 +35,7 @@
     "angular"
   ],
   "author": "Yann Stepienik",
-  "license": "ISC",
+  "license": "Apache 2.0",
   "bugs": {
     "url": "https://github.com/azukaar/electron-css/issues"
   },
@@ -39,6 +45,7 @@
     "babel-jest": "^23.2.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.7.0",
+    "coveralls": "^3.0.1",
     "webpack": "^4.12.2"
   },
   "dependencies": {

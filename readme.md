@@ -1,4 +1,8 @@
+[![CircleCI](https://img.shields.io/circleci/project/github/azukaar/electron-css.svg)](https://circleci.com/gh/azukaar/electron-css/tree/master) [![Coverage Status](https://img.shields.io/coveralls/github/azukaar/electron-css.svg)](https://coveralls.io/github/azukaar/electron-css?branch=master) [![js-airbnb-style](https://img.shields.io/badge/code%20style-Airbnb-brightgreen.svg)](https://www.npmjs.com/package/eslint-config-airbnb-base)
+
 # Electron-css
+
+[![NPM](https://nodei.co/npm/electron-css-document.png)](https://npmjs.org/package/electron-css-document)
 
 Easiest framework agnostic Style in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
 
