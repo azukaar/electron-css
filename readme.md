@@ -2,7 +2,7 @@
 
 # Electron-css
 
-[![NPM](https://nodei.co/npm/electron-css-document.png)](https://npmjs.org/package/electron-css-document)
+[![NPM](https://nodei.co/npm/electron-css.png)](https://npmjs.org/package/electron-css)
 
 Easiest framework agnostic Style in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
 
