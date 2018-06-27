@@ -95,8 +95,8 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
   clearCSS();
 }
 
+window.CSS = CSS;
+
 if (typeof module != undefined && module.exports) {
   module.exports = CSS;
 }
-
-window.CSS = CSS;

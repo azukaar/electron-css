@@ -1,6 +1,6 @@
 {
   "name": "electron-css",
-  "version": "0.4.4",
+  "version": "0.4.7",
   "description": "Easiest, framework agnostic Style in JS library",
   "main": "dist/index.js",
   "files": [
