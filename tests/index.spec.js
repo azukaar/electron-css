@@ -1,7 +1,7 @@
 import * as CONSTANTS from '../src/constants';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import CSS from '../src/index';
+import {CSS, Keyframes} from '../src/index';
 
 document.body.innerHTML += '<div id="playground"></div>';
 
@@ -69,6 +69,23 @@ describe('', () => {
       expect(getSheet().cssRules[2].style.color).toBe('blue');
     });
   })
+
+  describe('Keyframes Creation', () => {
+    it('can create a keyframes', () => {
+      expect(Keyframes('').toString()).toMatch(/^keys/);
+    });
+
+    it('can create a keyframes from JSON', () => {
+      expect(Keyframes({
+        from: {
+          color: 'red'
+        },
+        to : {
+          color: 'blue'
+        }
+      }).toString()).toMatch(/^keys/);
+    });
+  });
   
   describe('Style management', () => {
     it('create a style element', () => {

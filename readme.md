@@ -97,12 +97,29 @@ const bar = CSS({
 });
 ```
 
+## Animations
+
+```js
+const rotateAnimation = ElectronCSS.Keyframes({
+    '0%' : {
+        transform: 'rotate(0deg)'
+    },
+    '100%' : {
+        transform: 'rotate(360deg)'
+    }
+});
+
+const someStyle = CSS({
+    animation: `${rotateAnimation} 5s infinite`
+});
+```
+
 # Examples 
 
 ## React
 
 ```js
-import CSS from 'electron-css';
+import {CSS} from 'electron-css';
 
 class MyComp extends React.Component {
     render() {
@@ -125,7 +142,7 @@ class MyComp extends React.Component {
 JSFiddle : https://jsfiddle.net/wrme0pz7/33/
 
 ```js
-import CSS from 'electron-css';
+import {CSS} from 'electron-css';
 
 const myClass = CSS({
     backgroundColor: this.props.color,
@@ -154,7 +171,7 @@ Blossom.register({
 <script src='electron-css/index.js'></script>
 
 <script>
-    const myClass = CSS(`color:red;`);
+    const myClass = ElectronCSS.CSS(`color:red;`);
     $(element).append(`
         <div class="${myClass}">Hello World !</div>
     `);

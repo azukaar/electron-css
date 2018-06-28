@@ -48,7 +48,11 @@ const jsonToCss = function (_css, className) {
     }
   }
 
-  return `.${className} {${css}} ${master}`;
+  if(className) {
+    return `.${className} {${css}} ${master}`;
+  } else {
+    return css;
+  }
 }
 
 const CSS = function (rules) {
@@ -87,16 +91,45 @@ const CSS = function (rules) {
   return result;
 }
 
+const Keyframes = function (rules) {
+  const keysName = 'keys' + Date.now() + parseInt(Math.random() * 10000);
+  let result = '';
+
+  if(typeof rules !== 'string') {
+    for(let key in rules) {
+      const value = typeof rules[key] === 'string' ? 
+        rules[key] : jsonToCss(rules[key])
+
+        result += `
+          ${key} {
+            ${value}
+          }
+        `;
+    };
+  }
+  else {
+    result  = rules;
+  }
+
+  document.getElementById('_electron_css_sheet_keyframes').innerHTML += `
+    @keyframes ${keysName} {
+      ${result}
+    }
+  `;
+
+  return keysName;
+}
+
 if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
   const stylesheet = document.createElement('style');
   stylesheet.id = '_electron_css_sheet';
   document.body.appendChild(stylesheet);
 
+  const stylesheetKeyframes = document.createElement('style');
+  stylesheetKeyframes.id = '_electron_css_sheet_keyframes';
+  document.body.appendChild(stylesheetKeyframes);
+
   clearCSS();
 }
 
-window.CSS = CSS;
-
-if (typeof module != undefined && module.exports) {
-  module.exports = CSS;
-}
+export {CSS, Keyframes};

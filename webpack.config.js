@@ -2,11 +2,12 @@ const path = require('path');
 
 module.exports = {
   entry: './src/index.js',
-  target: 'node',
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
-    libraryTarget: 'umd'
+    library: 'ElectronCSS',
+    libraryTarget: 'umd',
+    globalObject: 'typeof self !== \'undefined\' ? self : this'
   },
   module: {
     rules: [

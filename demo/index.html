@@ -1,7 +1,17 @@
 <body>
     <script src='./index.js'></script>
     <script>
-        const wrapper = CSS({
+        const rotateAnimation = ElectronCSS.Keyframes({
+            '0%' : {
+                transform: 'rotate(0deg)'
+            },
+            '100%' : {
+                transform: 'rotate(360deg)'
+            }
+        });
+
+        const wrapper = ElectronCSS.CSS({
+            animation: `${rotateAnimation} 5s infinite`,
             border: '1px solid black',
             height: '150px',
             width: '150px',
@@ -10,7 +20,7 @@
             }
         });
 
-        const tester = CSS({
+        const tester = ElectronCSS.CSS({
             fontSize: '150%',
             [wrapper.onHover]: {
                 color: 'pink'
