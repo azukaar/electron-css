@@ -1,7 +1,7 @@
 import * as CONSTANTS from '../src/constants';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, Keyframes} from '../src/index';
+import {CSS, Keyframes, MediaQuery} from '../src/index';
 
 document.body.innerHTML += '<div id="playground"></div>';
 
@@ -85,6 +85,36 @@ describe('', () => {
         }
       }).toString()).toMatch(/^keys/);
     });
+  });
+
+  describe('MediaQuery Creation', () => {
+    it('can create a mediaQuery', () => {
+      expect(MediaQuery().toString()).toMatch(/^@media/);
+    });
+
+    it('can create a mediaQuery from JSON', () => {
+      expect(MediaQuery({
+        maxWidth: '480px',
+        maxHeight: '720px'
+      }).toString()).toMatch(/^@media/);
+    })
+
+    it('can turn mediaQuery into functions', () => {
+      expect(typeof MediaQuery({
+        maxWidth: '480px',
+        maxHeight: '720px'
+      })).toBe('function');
+    })
+
+    it('can combine mediaQueries', () => {
+      expect(MediaQuery(MediaQuery({
+        maxWidth: '480px',
+        maxHeight: '720px'
+      }), MediaQuery({
+        maxWidth: '480px',
+        maxHeight: '720px'
+      })).toString()).toMatch(/^@media/);
+    })
   });
   
   describe('Style management', () => {

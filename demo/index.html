@@ -9,6 +9,20 @@
                 transform: 'rotate(360deg)'
             }
         });
+        
+        const mobileOnly = ElectronCSS.MediaQuery({
+            maxWidth: '480px',
+            maxHeight: '720px'
+        })
+
+        const tabletOnly = ElectronCSS.MediaQuery({
+            minWidth: '480px',
+            minHeight: '720px',
+            maxWidth: '720px',
+            maxHeight: '1024px'
+        })
+
+        const tabletMobile = ElectronCSS.MediaQuery(mobileOnly, tabletOnly);
 
         const wrapper = ElectronCSS.CSS({
             animation: `${rotateAnimation} 5s infinite`,
@@ -24,6 +38,9 @@
             fontSize: '150%',
             [wrapper.onHover]: {
                 color: 'pink'
+            },
+            [tabletMobile]: {
+                color: 'blue'
             }
         });
 

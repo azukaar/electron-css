@@ -6,7 +6,7 @@
 
 Easiest framework agnostic Style in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
 
-JSFIddle : https://jsfiddle.net/wrme0pz7/42/
+JSFIddle : https://jsfiddle.net/wrme0pz7/45/
 
 # Style in JS ?
 
@@ -99,6 +99,8 @@ const bar = CSS({
 
 ## Animations
 
+Animations are also JS object which also prevent name clashes. Warning : Animations dont get Garbage collected.
+
 ```js
 const rotateAnimation = ElectronCSS.Keyframes({
     '0%' : {
@@ -112,6 +114,32 @@ const rotateAnimation = ElectronCSS.Keyframes({
 const someStyle = CSS({
     animation: `${rotateAnimation} 5s infinite`
 });
+```
+
+## Media Query
+
+Another great example of how `style-in-js` can help your DX, are media queries. Usually, developer have an interface for 
+mediaQuery in CSS, and one in JS. Electron-CSS provide both in one.
+
+```js
+const mobileOnly = MediaQuery({
+    maxWidth: '480px',
+    maxHeight: '720px'
+})
+
+const someStyle = CSS({
+    [mobileOnly]: {
+        color: 'red'
+    }
+});
+
+class MyComp extends React.Component {
+    render() {
+        return <div className={someStyle}>
+            Hello {mobileOnly() ? 'Mobile' : 'Desktop'}
+        </div>;
+    }
+}
 ```
 
 # Examples 

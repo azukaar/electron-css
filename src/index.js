@@ -15,12 +15,20 @@ const clearCSS = function (_i = 0) {
   if (sheet.cssRules) {
     if (_i > sheet.cssRules.length) _i = 0;
     for (let i = _i; i < _i + nbToIt; i++) {
-      if (sheet.cssRules[i]) {
+      if (sheet.cssRules[i] && sheet.cssRules[i].selectorText) {
         const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0];
 
         if (document.getElementsByClassName(className).length === 0) {
           sheet.deleteRule(i);
         }
+      } else if(sheet.cssRules[i]){
+        Array.from(sheet.cssRules[i].cssRules).forEach( (value) => {
+          const className = value.selectorText.split('.')[1].split(':')[0];
+
+          if (document.getElementsByClassName(className).length === 0) {
+            sheet.deleteRule(i);
+          }
+        });
       }
     }
     setTimeout(() => clearCSS(_i + nbToIt), GC_COLLECT_TIME);
@@ -36,7 +44,9 @@ const jsonToCss = function (_css, className) {
   let css = '';
 
   for (let key in _css) {
-    if (key.match(/^on/)) {
+    if(key.match(/^@media/)) {
+      master += jsonToCss(_css[key], key + '{ .' + className);
+    } else if (key.match(/^on/)) {
       const eventKey = caseConvert(key.replace(/^on[A-Z]/, match => match.substr(-1).toLowerCase()));
 
       master += jsonToCss(_css[key], className + ':' + eventKey);
@@ -48,7 +58,9 @@ const jsonToCss = function (_css, className) {
     }
   }
 
-  if(className) {
+  if(className && className.match(/^@media/)) {
+    return `${className} {${css}}} ${master}`;
+  } else if (className) {
     return `.${className} {${css}} ${master}`;
   } else {
     return css;
@@ -120,6 +132,43 @@ const Keyframes = function (rules) {
   return keysName;
 }
 
+const MediaQuery = function (...set) {
+  let arrayValues = [];
+
+  for(let mediaQueryIndex in set) {
+    const mediaQuery = set[mediaQueryIndex];
+    let stringified = '';
+    
+    if (mediaQuery.arrayValues) {
+      arrayValues = arrayValues.concat(mediaQuery.arrayValues);
+    } else {
+      for(let ruleIndex in mediaQuery) {
+        stringified += `(${caseConvert(ruleIndex)} : ${mediaQuery[ruleIndex]}) and `;
+      }
+
+      stringified = stringified.substr(0, stringified.length - 4);
+
+      const result = {}
+
+      result.stringified = stringified;
+
+      arrayValues.push(result);
+    }
+  }
+
+  let media = function () {
+    return arrayValues.some((value) => {
+      console.log(value.stringified, matchMedia(value.stringified).matches)
+      return matchMedia(value.stringified).matches
+    });
+  }
+
+  media.toString = () => '@media screen and ' + arrayValues.map(v => v.stringified).join(', screen and ');
+  media.arrayValues = arrayValues;
+
+  return media;
+}
+
 if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
   const stylesheet = document.createElement('style');
   stylesheet.id = '_electron_css_sheet';
@@ -132,4 +181,4 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
   clearCSS();
 }
 
-export {CSS, Keyframes};
+export {CSS, Keyframes, MediaQuery};
