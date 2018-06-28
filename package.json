@@ -1,6 +1,6 @@
 {
   "name": "electron-css",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Easiest, framework agnostic Style in JS library",
   "main": "dist/index.js",
   "files": [
@@ -48,9 +48,7 @@
     "coveralls": "^3.0.1",
     "jest": "^23.2.0",
     "webpack": "^4.12.2",
+    "webpack-serve": "^1.0.4",
     "webpack-cli": "^3.0.8"
-  },
-  "dependencies": {
-    "webpack-serve": "^1.0.4"
   }
 }
