@@ -189,6 +189,24 @@ CSS({
 });
 ```
 
+### Classes spreading
+
+Use classes to compose your classes in your template.
+
+```js
+import {CSS, color} from 'electron-CSS';
+
+const foo = CSS();
+
+<div className={classes({
+        foo,
+        bar : false,
+        something: true
+      })}>test</div>
+
+// classes() will return 'foo something'
+```
+
 ### Colors
 
 Use colors constants and darken/lighten helpers to describe your theme.

@@ -1,7 +1,7 @@
 import * as CONSTANTS from '../src/config';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, resetCSS, Keyframes, MediaQuery} from '../src/index';
+import {CSS, classes, resetCSS, Keyframes, MediaQuery} from '../src/index';
 import color from '../src/color';
 import {borderStyle} from '../src/constants';
 import units from '../src/units';
@@ -152,6 +152,16 @@ describe('', () => {
   describe('Style management', () => {
     it('create a style element', () => {
       expect(document.getElementById('_electron_css_sheet')).not.toBe(null);
+    });
+
+    it('allow spreading classes', () => {
+      const foo = CSS();
+
+      expect(classes({
+        foo,
+        bar : false,
+        something: true
+      })).toBe('foo something');
     });
 
     it('Use predictible IDs on tests', () => {

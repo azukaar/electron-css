@@ -208,6 +208,16 @@ const MediaQuery = function (...set) {
   return media;
 }
 
+const classes = function (classes) {
+  const result = [];
+  for(let cl in classes) {
+    if (classes[cl]) {
+      result.push(cl);
+    }
+  }
+  return result.join(' ');
+}
+
 if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
   const stylesheet = document.createElement('style');
   stylesheet.id = '_electron_css_sheet';
@@ -225,6 +235,7 @@ export {
   resetCSS,
   Keyframes,
   MediaQuery,
+  classes,
   color,
   units,
   constants
