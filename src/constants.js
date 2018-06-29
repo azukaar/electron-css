@@ -229,7 +229,12 @@ const constants = { alignContent:
     inset: 'inset',
     initial: 'initial',
     inherit: 'inherit' },
- boxSizing: { initial: 'initial', inherit: 'inherit' },
+ boxSizing: { 
+    initial: 'initial',
+    inherit: 'inherit',
+    borderBox: 'border-box',
+    contentBox: 'content-box'
+  },
  captionSide:
   { top: 'top',
     bottom: 'bottom',
