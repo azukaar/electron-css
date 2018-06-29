@@ -1,9 +1,38 @@
-import {GC_COLLECT_TIME} from './constants';
+import {GC_COLLECT_TIME} from './config';
+import color from './color';
+import units from './units';
+import constants from './constants';
+
+let testCounter = 0;
 
 const pseudoClassList = [
   'active', 'checked', 'disabled', 'empty', 'enabled', 'focus',
   'hover', 'invalid', 'link', 'read-only', 'required', 'valid', 'visited'
 ];
+
+const getEnv = function () {
+  if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV) {
+    return process.env.NODE_ENV;
+  } else {
+    return 'production';
+  }
+}
+
+const randomId = function () {
+  if(getEnv() === 'test') {
+    return testCounter++;
+  } else {
+    return Date.now() + parseInt(Math.random() * 10000);
+  }
+}
+
+const resetCSS = function () {
+  testCounter = 0;
+  const element = document.getElementById('_electron_css_sheet');
+  const stylesheet = document.createElement('style');
+  stylesheet.id = '_electron_css_sheet';
+  document.body.replaceChild(stylesheet, element);
+}
 
 const clearCSS = function (_i = 0) {
   const stylesheet = document.getElementById('_electron_css_sheet');
@@ -54,7 +83,17 @@ const jsonToCss = function (_css, className) {
       master += key + ' ' + jsonToCss(_css[key], className);
     } else {
       const dashKey = caseConvert(key);
-      css += dashKey + ':' + _css[key] + ';';
+      let value = _css[key];
+
+      if(typeof value === 'undefined') {
+        throw new Error('CSS Error : Value for `' + dashKey + '` is undefined.');
+      }
+
+      if(typeof value !== 'string' && value.length) {
+        value = value.join(' ');
+      }
+
+      css += dashKey + ':' + value + ';';
     }
   }
 
@@ -68,7 +107,7 @@ const jsonToCss = function (_css, className) {
 }
 
 const CSS = function (rules) {
-  const className = 'class' + Date.now() + parseInt(Math.random() * 10000);
+  const className = 'class' + randomId();
   let temp = '';
 
   if (typeof rules !== 'string') {
@@ -104,7 +143,7 @@ const CSS = function (rules) {
 }
 
 const Keyframes = function (rules) {
-  const keysName = 'keys' + Date.now() + parseInt(Math.random() * 10000);
+  const keysName = 'keys' + randomId();
   let result = '';
 
   if(typeof rules !== 'string') {
@@ -181,4 +220,12 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
   clearCSS();
 }
 
-export {CSS, Keyframes, MediaQuery};
+export {
+  CSS,
+  resetCSS,
+  Keyframes,
+  MediaQuery,
+  color,
+  units,
+  constants
+};

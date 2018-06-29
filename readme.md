@@ -4,13 +4,13 @@
 
 [![NPM](https://nodei.co/npm/electron-css.png)](https://npmjs.org/package/electron-css)
 
-Easiest framework agnostic Style in JS library. Use with React, Angular or vanilla JS. Compatible with both CSS and JSON syntax.
+Proper, framework agnostic Style in JS library, without any of the fuss of CSS
 
 JSFIddle : https://jsfiddle.net/wrme0pz7/45/
 
 # Style in JS ?
 
-Electron-css is born with this idea that css-in-jss is always doomed to look like CSS mutated in some JSON format. The idea here
+Electron-css is born with this idea that css-in-jss is always doomed to look like CSS mutated in some JSON format. The point here
 is to get rid of the assumption that the style is going to be converted to CSS, to think "outside of the stylesheet". One of the
 golden rule of the design of Electron-css is : never use any selector (at all). Then you might wonder "Why is it called electron-css
 then?" ...well, I'm just bad at naming things.
@@ -141,6 +141,124 @@ class MyComp extends React.Component {
     }
 }
 ```
+
+## More JS Please !
+
+In style-in-JS world, you should avoid as much as possible to use strings, simply because it will force you to do string concatenation and create some monster codes.
+By providing helpers, constants, and functions, Electron-css help you to avoid writting codes like :
+
+```js
+import {CSS} from 'electron-css';
+const color = darken(myColor, 0.1);
+
+CSS({
+    border: `${theme.borderColor} ${this.props.large ? 5 : 2} solid`,
+    width: `${this.props.width}px`,
+    color: `rgb(${color[0]}, ${color[1]}, ${color[2]})`,
+})
+```
+
+You can turn this ugly code in :
+
+```js
+import {CSS, color, constants, units} from 'electron-css';
+const {borderStyle} = constants;
+const {px} = units;
+
+CSS({
+    border: [theme.borderColor, 
+            this.props.large ? 5 : 2,
+            borderStyle.solid],
+    width: px(this.props.width),
+    color: color.darken(myColor, 0.1),
+})
+```
+
+please read see the details here : 
+
+### Arrays
+
+Use Array to declare rules that are composed of multiple keywords.
+
+```js
+import {CSS, color} from 'electron-CSS';
+
+CSS({
+  border: ['1px', 'red', 'solid'],
+  margin: ['10px', '5px']
+});
+```
+
+### Colors
+
+Use colors constants and darken/lighten helpers to describe your theme.
+
+```js
+import {CSS, color} from 'electron-CSS';
+
+const mainColor = color.red;
+
+const myCSS({
+    color: mainColor,
+    border: ['1px', 'solid', color.darken(mainColor, 0.2)]
+});
+```
+
+### Units
+
+Instead of always concataining units, use the units helpers : 
+
+```js
+import {CSS, units} from 'electron-CSS';
+const {pct, px} = units;
+
+const mainColor = color.red;
+
+const myCSS({
+    width: px(1000), // 1000px
+    height: pct(50) // 50%
+});
+```
+
+### Constants
+
+Avoid typo and errors by using provided constant for every CSS rules.
+
+```js
+import {CSS, constants} from 'electron-CSS';
+const {margin, padding, borderStyle} = constants;
+
+const mainColor = color.red;
+
+const myCSS({
+    margin: margin.aut, // margin: aut doesnt exist, and will throw an error in your console !
+    padding: padding.inherit
+    borderStyle: borderStyle.solid
+
+});
+```
+
+## Snapshot tests
+
+As Electron-CSS generate random classnames it might mess up with your tests. Here is how to avoid this.
+
+First, you need to run your test with NODE_ENV properly set to test (you don't have to use cross-env). that will force
+Electron to use predictible classnames.
+
+```
+cross-env NODE_ENV=test jest
+```
+
+Second, you need to reset every CSS beforeEach() test : 
+
+```
+beforeEach(() => {
+    resetCSS();
+});
+```
+
+Remember that Electron will manage a style element in your document, so if you do things like `document.body.innerHTML = ` in your tests,
+you might want to switch to a more scoped solution as you would remove Electron's stylesheet from the document.
 
 # Examples 
 
