@@ -1,6 +1,6 @@
 {
   "name": "electron-css",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Proper, framework agnostic Style in JS library, without any of the fuss of CSS",
   "main": "dist/index.js",
   "files": [
@@ -31,6 +31,7 @@
   "keywords": [
     "css",
     "css-in-js",
+    "style",
     "react",
     "angular"
   ],

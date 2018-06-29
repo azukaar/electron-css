@@ -12,6 +12,7 @@ const units = {
   'rem': (nb) => nb + 'rem',
   'vw': (nb) => nb + 'vw',
   'vh': (nb) => nb + 'vh',
+  'deg': (nb) => nb + 'deg',
   'vmin': (nb) => nb + 'vmin',
   'vmax': (nb) => {
     // TODO : display warning for IE

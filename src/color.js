@@ -178,6 +178,32 @@ const color = {
   lighten: function (color, amt) {
     return this.convert(amt, color);
   },
+
+  gradient: function(type, args) {
+    const flatArray = args.map((a) => Array.isArray(a) ? a.join(' ') : a);
+    return `${type}(${flatArray.join(', ')})`;
+  },
+
+  closestSide: 'closest-side at',
+  farthestSide: 'farthest-side at',
+  closestCorner: 'closest-corner at',
+  farthestCorner: 'farthest-corner at',
+
+  linearGradient: function (...args) {
+    return this.gradient('linear-gradient', args);
+  },
+
+  repeatingLinearGradient: function (...args) {
+    return this.gradient('repeating-linear-gradient', args);
+  },
+
+  radialGradient: function (...args) {
+    return this.gradient('radial-gradient', args);
+  },
+
+  repeatingRadialGradient: function (...args) {
+    return this.gradient('repeating-radial-gradient', args);
+  }
 };
 
 export default color;

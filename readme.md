@@ -194,7 +194,7 @@ CSS({
 Use classes to compose your classes in your template.
 
 ```js
-import {CSS, color} from 'electron-CSS';
+import {CSS, color, classes} from 'electron-CSS';
 
 const foo = CSS();
 
@@ -220,6 +220,20 @@ const myCSS({
     color: mainColor,
     border: ['1px', 'solid', color.darken(mainColor, 0.2)]
 });
+```
+
+### Gradients
+
+Use colors constants and darken/lighten helpers to describe your theme.
+
+```js
+import {CSS, color, pct} from 'electron-CSS';
+
+color.linearGradient([color.red, pct(50)], color.yellow)
+// linear-gradient(#ff0000 50%, #ffff00)
+
+color.repeatingRadialGradient([color.closestSide, pct(60), pct(55)], color.red, color.yellow, color.black)
+// repeating-radial-gradient(closest-side at 60% 55%, #ff0000, #ffff00, #000000)
 ```
 
 ### Units
