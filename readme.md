@@ -6,7 +6,7 @@
 
 Proper, framework agnostic Style in JS library, without any of the fuss of CSS
 
-JSFIddle : https://jsfiddle.net/wrme0pz7/45/
+JSFIddle : https://jsfiddle.net/wrme0pz7/54/
 
 # Style in JS ?
 
