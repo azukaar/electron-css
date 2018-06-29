@@ -9,6 +9,9 @@ module.exports = {
     libraryTarget: 'umd',
     globalObject: 'typeof self !== \'undefined\' ? self : this'
   },
+  optimization: {
+    nodeEnv: false
+  },
   module: {
     rules: [
       {

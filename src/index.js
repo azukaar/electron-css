@@ -11,8 +11,9 @@ const pseudoClassList = [
 ];
 
 const getEnv = function () {
-  if (typeof process !== 'undefined' && process.env && process.env.NODE_ENV) {
-    return process.env.NODE_ENV;
+  if (typeof global !== 'undefined' && global['process']
+        && global['process']['env'] && global['process']['env']['NODE_ENV']) {
+    return global['process']['env']['NODE_ENV'];
   } else {
     return 'production';
   }

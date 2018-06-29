@@ -165,9 +165,9 @@ describe('', () => {
     });
 
     it('Use predictible IDs on tests', () => {
-      const className = CSS({color: 'red'});
-
-      expect(className.toString()).toBe('class0');
+      expect(CSS().toString()).toBe('class0');
+      expect(CSS().toString()).toBe('class1');
+      expect(CSS().toString()).toBe('class2');
     });
 
     it('garbage collect unused classes', () => {
