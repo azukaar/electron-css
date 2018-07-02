@@ -47,7 +47,7 @@ const someStyle = CSS({
 
 This one is a bit special and illustrate how removing selector shape the library. 
 
-Suppose you have this documement :
+Suppose you have this document :
 
 ```html
 <div class="foo">
@@ -197,6 +197,7 @@ Use classes to compose your classes in your template.
 import {CSS, color, classes} from 'electron-CSS';
 
 const foo = CSS();
+const foo2 = CSS();
 
 <div className={classes({
         foo,
@@ -205,6 +206,13 @@ const foo = CSS();
       })}>test</div>
 
 // classes() will return 'foo something'
+
+<div className={classes([
+        foo,
+        foo2
+      ])}>test</div>
+
+// classes() will return 'class0, class1'
 ```
 
 ### Colors

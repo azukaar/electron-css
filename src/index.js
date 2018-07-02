@@ -210,13 +210,17 @@ const MediaQuery = function (...set) {
 }
 
 const classes = function (classes) {
-  const result = [];
-  for(let cl in classes) {
-    if (classes[cl]) {
-      result.push(cl);
+  if(Array.isArray(classes)) {
+    return classes.join(' ');
+  } else {
+    const result = [];
+    for(let cl in classes) {
+      if (classes[cl]) {
+        result.push(cl);
+      }
     }
+    return result.join(' ');
   }
-  return result.join(' ');
 }
 
 if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {

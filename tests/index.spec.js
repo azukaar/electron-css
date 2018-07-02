@@ -164,6 +164,16 @@ describe('', () => {
       })).toBe('foo something');
     });
 
+    it('allow spreading classes array', () => {
+      const foo = CSS();
+      const foo2 = CSS();
+
+      expect(classes([
+        foo,
+        foo2
+      ])).toBe('class0 class1');
+    });
+
     it('Use predictible IDs on tests', () => {
       expect(CSS().toString()).toBe('class0');
       expect(CSS().toString()).toBe('class1');
