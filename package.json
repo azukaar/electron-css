@@ -1,6 +1,6 @@
 {
   "name": "electron-css",
-  "version": "0.7.6",
+  "version": "0.7.8",
   "description": "Proper, framework agnostic Style in JS library, without any of the fuss of CSS",
   "main": "dist/index.js",
   "files": [
@@ -45,12 +45,13 @@
     "babel-core": "^6.26.3",
     "babel-jest": "^23.2.0",
     "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "coveralls": "^3.0.1",
     "cross-env": "^5.2.0",
     "jest": "^23.2.0",
     "webpack": "^4.12.2",
-    "webpack-serve": "^1.0.4",
-    "webpack-cli": "^3.0.8"
+    "webpack-cli": "^3.0.8",
+    "webpack-serve": "^1.0.4"
   }
 }

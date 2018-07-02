@@ -223,6 +223,10 @@ const classes = function (classes) {
   }
 }
 
+const calc = function(...elements) {
+  return 'calc('+elements.join(' ')+')';
+}
+
 if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
   const stylesheet = document.createElement('style');
   stylesheet.id = '_electron_css_sheet';
@@ -237,6 +241,7 @@ if (typeof document !== 'undefined' && !document.getElementById('_electron_css_s
 
 export {
   CSS,
+  calc,
   resetCSS,
   Keyframes,
   MediaQuery,

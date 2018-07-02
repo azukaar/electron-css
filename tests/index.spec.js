@@ -1,9 +1,9 @@
 import * as CONSTANTS from '../src/config';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, classes, resetCSS, Keyframes, MediaQuery} from '../src/index';
+import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery} from '../src/index';
 import color from '../src/color';
-import {borderStyle} from '../src/constants';
+import {borderStyle, transform} from '../src/constants';
 import units from '../src/units';
 
 document.body.innerHTML += '<div id="playground"></div>';
@@ -74,6 +74,14 @@ describe('', () => {
 
       expect(getSheet().cssRules[0].style.border).toBe('#ff0000 solid 1px');
     });
+
+    it('have a calc function', () => {
+      expect(calc('1 + 1')).toBe('calc(1 + 1)');
+    });
+
+    it('have transform functions', () => {
+      expect(transform.rotate(units.deg(0), units.deg(90))).toBe('rotate(0deg, 90deg)');
+    })
 
     it('convert pseudo-elements', () => {
       CSS({
