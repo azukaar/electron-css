@@ -6,7 +6,8 @@
 
 Proper, framework agnostic Style in JS library, without any of the fuss of CSS
 
-JSFIddle : https://jsfiddle.net/wrme0pz7/54/
+JSFIddle: https://jsfiddle.net/wrme0pz7/54/
+Getting Started: https://medium.com/@azukaar/stop-using-css-in-js-and-welcome-proper-styling-in-js-with-electron-css-d28536ba3e85
 
 # Style in JS ?
 
