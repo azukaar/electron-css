@@ -79,6 +79,10 @@ describe('', () => {
       expect(calc('1 + 1')).toBe('calc(1 + 1)');
     });
 
+    it('add quotes to content', () => {
+      expect(CSS({content: 'hey'}).cache).toBe('.class0 {content:"hey";} ');
+    });
+
     it('have transform functions', () => {
       expect(transform.rotate(units.deg(0), units.deg(90))).toBe('rotate(0deg, 90deg)');
     })

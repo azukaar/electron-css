@@ -94,6 +94,10 @@ const jsonToCss = function (_css, className) {
         value = value.join(' ');
       }
 
+      if (dashKey === 'content') {
+        value = `"${value}"`;
+      }
+
       css += dashKey + ':' + value + ';';
     }
   }
