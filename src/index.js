@@ -135,6 +135,9 @@ const CSS = function (rules) {
       ruleArray.pop();
       ruleArray.forEach(rule => sheet.insertRule(rule + '}'));
       return className;
+    },
+    inherit() {
+      return rules;
     }
   };
 

@@ -302,6 +302,47 @@ beforeEach(() => {
 Remember that Electron will manage a style element in your document, so if you do things like `document.body.innerHTML = ` in your tests,
 you might want to switch to a more scoped solution as you would remove Electron's stylesheet from the document.
 
+# Inheritance 
+
+Using Electron-js you should avoid adding multiple classes to an object, especially if those classes overwrite each others. Use inheritance instead. The main reason is that you don't want your styling to depend on what order you create your classes.
+
+```
+<style>
+.a {
+  color: red;
+}
+.b {
+  color: blue;
+}
+</style>
+
+<div class="a b">
+I'm blue dadudidaduda
+</div>
+
+<div class="b a">
+I'm blue dadudidaduda
+</div>
+```
+
+This is the proper way to inherit : 
+
+```
+const Button = CSS({
+    width: pct(100),
+    color: color.blue
+});
+
+const halfButton = CSS({
+    ...Button.inherit(),
+    width: pct(50)
+});
+```
+
+This way you don't have to use both Button and halfButton on your actual HTML element, and the result won't depend on wether or not you registered halfButton after Button, making it less likely to cause issues in your app.
+
+Don't worry about having multiple `width` in your CSS : because object keys are uniques in JS, the resulting styling won't have duplicated rules.
+
 # Examples 
 
 ## React

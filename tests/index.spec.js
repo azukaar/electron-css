@@ -87,6 +87,20 @@ describe('', () => {
       expect(transform.rotate(units.deg(0), units.deg(90))).toBe('rotate(0deg, 90deg)');
     })
 
+    it('can inherit', () => {
+      const Button = CSS({
+        width: units.pct(100),
+        color: color.blue
+      });
+
+      const halfButton = CSS({
+        ...Button.inherit(),
+        width: units.pct(50)
+      });
+
+      expect(halfButton.cache).toBe('.class1 {width:50%;color:#0000ff;} ');
+    })
+
     it('convert pseudo-elements', () => {
       CSS({
         color: 'red',
