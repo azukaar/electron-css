@@ -306,7 +306,7 @@ you might want to switch to a more scoped solution as you would remove Electron'
 
 Using Electron-js you should avoid adding multiple classes to an object, especially if those classes overwrite each others. Use inheritance instead. The main reason is that you don't want your styling to depend on what order you create your classes.
 
-```
+```html
 <style>
 .a {
   color: red;
@@ -327,7 +327,7 @@ I'm blue dadudidaduda
 
 This is the proper way to inherit : 
 
-```
+```javascript
 const Button = CSS({
     width: pct(100),
     color: color.blue
