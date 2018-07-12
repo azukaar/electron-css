@@ -85,6 +85,7 @@ describe('', () => {
 
     it('have transform functions', () => {
       expect(transform.rotate(units.deg(0), units.deg(90))).toBe('rotate(0deg, 90deg)');
+      expect(transform.rotate(units.deg(90))).toBe('rotate(90deg, 0)');
     })
 
     it('can inherit', () => {
