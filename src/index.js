@@ -7,7 +7,12 @@ let testCounter = 0;
 
 const pseudoClassList = [
   'active', 'checked', 'disabled', 'empty', 'enabled', 'focus',
-  'hover', 'invalid', 'link', 'read-only', 'required', 'valid', 'visited'
+  'hover', 'invalid', 'link', 'read-only', 'required', 'valid', 'visited',
+  'lastOfType', 'onlyOfType', 'onlyChild', 'optional', 'outOfRange', 'firstLine', 'firstLetter', 
+];
+
+const pseudoFunctionsList = [
+  'nthChild', 'lang', 'not', 'nthLstChild', 'nthLastOfType', 'nthOfType',
 ];
 
 const getEnv = function () {
@@ -141,11 +146,50 @@ const CSS = function (rules) {
     }
   };
 
-  pseudoClassList.forEach(pc => {
-    let methodName = caseConvert(pc);
-    methodName = methodName.replace(/^[a-z]/, match => match.toUpperCase());
-    result['on' + methodName] = '.' + className + ':' + pc;
-  });
+  const patchForPseudoElement = (className, object) => {
+    pseudoClassList.forEach(pc => {
+      let methodName = pc.replace(/^[a-z]/, match => match.toUpperCase());
+      let realMethodName = caseConvert(pc);
+
+      Object.defineProperties(object, {
+        ['on' + methodName]: {
+          get: () => {
+            const newClass = className + ':' + realMethodName;
+            return patchForPseudoElement(newClass, {
+              toString() {
+                return newClass;
+              }
+            });
+          }
+        }
+      });
+    });
+
+    pseudoFunctionsList.forEach(pc => {
+      let realMethodName = caseConvert(pc);
+
+      object[pc] = (arg) => {
+        const newClass = className + ':' + realMethodName + '(' + arg + ')';
+        return patchForPseudoElement(newClass, {
+          toString() {
+            return newClass;
+          }
+        });
+      }
+    });
+
+    Object.defineProperties(object, {
+      asParent: {
+        get: () => {
+          return className;
+        }
+      }
+    });
+
+    return object;
+  };
+
+  patchForPseudoElement('.' + className, result);
 
   return result;
 }

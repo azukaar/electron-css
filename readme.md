@@ -99,6 +99,29 @@ const bar = CSS({
 });
 ```
 
+Here is another example 
+
+```javascript
+const foo = CSS({
+    color: 'red'
+});
+
+const bar = CSS({
+    color: 'red',
+    [foo.asParent]: {
+        color:'green'
+    },
+    [foo.nthChild(1)]: {
+        color:'green'
+    },
+    [foo.onHover.onFocus]: {
+        color: 'blue'
+    }
+});
+```
+
+Note: `asParent` is a special pseudo element added to test if the current element is a child of another.
+
 ## Animations
 
 Animations are also JS object which also prevent name clashes. Warning : Animations dont get Garbage collected.

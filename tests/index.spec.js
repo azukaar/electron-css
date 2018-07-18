@@ -51,6 +51,21 @@ describe('', () => {
       expect(getSheet().cssRules[0].style.color).toBe(color.red);
     });
 
+    it('Can select parent', () => {
+      const foo = CSS({
+      });
+
+      const bar = CSS({
+        [foo.asParent]: {
+          color: color.red,
+          borderStyle: borderStyle.solid
+        }
+      });
+
+      expect(getSheet().cssRules[2].selectorText).toBe('.class0 .class1');
+      expect(getSheet().cssRules[2].style.color).toBe(color.red);
+    });
+
     it('Throws on typos', () => {
       expect(() => CSS({
         color: color.rd
@@ -124,10 +139,44 @@ describe('', () => {
         }
       });
 
+      expect(foo.onHover.toString()).toBe('.class0:hover');
       expect(getSheet().cssRules[1].style.color).toBe('red');
       expect(getSheet().cssRules[2].style.color).toBe('blue');
+      expect(getSheet().cssRules[2].selectorText).toBe('.class0:hover .class1');
     });
-  })
+
+    it('link classes pseudo functions', () => {
+      const foo = CSS();
+      
+      CSS({
+        color: 'red',
+        [foo.nthChild(1)]: {
+          color: 'blue'
+        }
+      });
+
+      expect(foo.nthChild(1).toString()).toBe('.class0:nth-child(1)');
+      expect(getSheet().cssRules[1].style.color).toBe('red');
+      expect(getSheet().cssRules[2].style.color).toBe('blue');
+      expect(getSheet().cssRules[2].selectorText).toBe('.class0:nth-child(1) .class1');
+    });
+
+    it('chains classes link pseudo-elements', () => {
+      const foo = CSS();
+      
+      CSS({
+        color: 'red',
+        [foo.onHover.onFocus]: {
+          color: 'blue'
+        }
+      });
+
+      expect(foo.onHover.onFocus.toString()).toBe('.class0:hover:focus');
+      expect(getSheet().cssRules[1].style.color).toBe('red');
+      expect(getSheet().cssRules[2].style.color).toBe('blue');
+      expect(getSheet().cssRules[2].selectorText).toBe('.class0:hover:focus .class1');
+    });
+  });
 
   describe('Keyframes Creation', () => {
     it('can create a keyframes', () => {
