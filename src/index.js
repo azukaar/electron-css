@@ -32,6 +32,71 @@ const randomId = function () {
   }
 }
 
+const dynamicCssList = [];
+
+const getDynamicRule = (unparsed) => {
+  const id = unparsed.split('@@')[1];
+  const rule = unparsed.split('@@')[2];
+  if(typeof dynamicCssList[id].realValues[rule] === 'undefined') {
+    console.error('ERROR CSS : ' + rule + ' doesn\'t exists on this dymamic rule set.');
+    console.trace();
+  }
+  return dynamicCssList[id].realValues[rule];
+}
+
+const subscribeDynamicCSS = (unparsed, cb) => {
+  const id = unparsed.split('@@')[1];
+  dynamicCssList[id].subscribe(cb);
+}
+
+const DynamicCSS = (defaultValues = {}) => {
+  const nextId = dynamicCssList.length;
+  const result =  new Proxy({
+    id: nextId,
+    realValues: defaultValues,
+    subscribed: [],
+    subscribe(cb) {
+      if(this.subscribed.indexOf(cb) === -1) {
+        this.subscribed.push(cb); 
+      }
+    },
+    refresh() {
+      this.subscribed.forEach((cb, key) => {
+        const isAlive = cb();
+        if(!isAlive) {
+          this.subscribed.splice(key, 1);
+        }
+      })
+    },
+    use(obj) {
+      this.realValues = Object.assign({}, obj);
+      this.refresh();
+    },
+    inject(obj) {
+      this.realValues = Object.assign({}, this.realValues, obj);
+      this.refresh();
+    }
+  }, {
+    get: (target, name) => {
+      if (typeof target[name] !== 'undefined') {
+        return target[name];
+      } else {
+        return '@@' + target.id + '@@' + name;
+      }
+    },
+    set: (target, name, value) => {
+      if (typeof target[name] !== 'undefined') {
+        target[name] = value;
+      } else {
+        target.realValues[name] = value;
+      }
+      return true;
+    }
+  });
+  dynamicCssList.push(result);
+  return result;
+};
+
 const resetCSS = function () {
   testCounter = 0;
   const element = document.getElementById('_electron_css_sheet');
@@ -74,7 +139,7 @@ const caseConvert = function (str) {
   return str.replace(/[A-Z]/g, match => '-' + match.toLowerCase());
 }
 
-const jsonToCss = function (_css, className) {
+const jsonToCss = function (_css, className, refresh = () => {}) {
   let master = '';
   let css = '';
 
@@ -96,7 +161,20 @@ const jsonToCss = function (_css, className) {
       }
 
       if(typeof value !== 'string' && value.length) {
+        value = value.map((v) => {
+          if (v.match(/^@@/)) {
+            subscribeDynamicCSS(value, refresh);
+            return getDynamicRule(value);
+          } else {
+            return v;
+          }
+        })
         value = value.join(' ');
+      } else {
+        if (value.match(/^@@/)) {
+          subscribeDynamicCSS(value, refresh);
+          value = getDynamicRule(value);
+        }
       }
 
       if (dashKey === 'content') {
@@ -117,30 +195,59 @@ const jsonToCss = function (_css, className) {
 }
 
 const CSS = function (rules) {
-  const className = 'class' + randomId();
+  let className = 'class' + randomId();
+  const stylesheet = document.getElementById('_electron_css_sheet');
+  const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
   let temp = '';
 
-  if (typeof rules !== 'string') {
-    temp = jsonToCss(rules, className);
-    document.getElementById('_electron_css_sheet').innerHTML += temp;
-  } else {
-    temp = '.' + className + ' {' + rules + '}';
-    document.getElementById('_electron_css_sheet').innerHTML += temp;
-  }
-
   const result = {
-    cache: temp + '',
-    toString() {
-    	const stylesheet = document.getElementById('_electron_css_sheet');
-      const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
-      if (Array.from(sheet.cssRules).some(r => r.selectorText === '.' + className)) {
-        return className;
+    getStyle() {
+      if (typeof rules !== 'string') {
+        temp = jsonToCss(rules, className, () => this.refresh());
+      } else {
+        temp = '.' + className + ' {' + rules + '}';
       }
-      const ruleArray = temp.split('}');
+      return temp;
+    },
+    
+    inject() {
+      const ruleArray = this.getStyle().split('}');
       ruleArray.pop();
-      ruleArray.forEach(rule => sheet.insertRule(rule + '}'));
+      ruleArray.filter(v=>v.length).forEach(rule => {
+        if(rule.match(/^\s*@media/)) {
+          sheet.insertRule(rule + '}}', sheet.cssRules.length);
+        } else {
+          sheet.insertRule(rule + '}', sheet.cssRules.length);
+        }
+      });
+    },
+
+    remove(callbackOnFirstSwap = () => {}) {
+      let existed = false;
+      const oldCN = className;
+      className = 'class' + randomId();
+      Array.from(document.getElementsByClassName(oldCN)).forEach( (element) => {
+        if (!existed) {
+          callbackOnFirstSwap();
+        }
+        existed = true;
+        element.className = element.className.replace(oldCN, className);
+      });
+      return existed;
+    },
+
+    refresh() {
+      let existed = this.remove(() => this.inject());
+      return existed;
+    },
+    
+    toString() {
+      if (!Array.from(sheet.cssRules).some(r => r.selectorText === '.' + className)) {
+        this.inject();
+      }
       return className;
     },
+
     inherit() {
       return rules;
     }
@@ -190,6 +297,8 @@ const CSS = function (rules) {
   };
 
   patchForPseudoElement('.' + className, result);
+
+  result.inject();
 
   return result;
 }
@@ -299,5 +408,6 @@ export {
   classes,
   color,
   units,
-  constants
+  constants,
+  DynamicCSS
 };

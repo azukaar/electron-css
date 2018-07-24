@@ -1,7 +1,7 @@
 import * as CONSTANTS from '../src/config';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery} from '../src/index';
+import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS} from '../src/index';
 import color from '../src/color';
 import {borderStyle, transform} from '../src/constants';
 import units from '../src/units';
@@ -95,7 +95,7 @@ describe('', () => {
     });
 
     it('add quotes to content', () => {
-      expect(CSS({content: 'hey'}).cache).toBe('.class0 {content:"hey";} ');
+      expect(CSS({content: 'hey'}).getStyle()).toBe('.class0 {content:"hey";} ');
     });
 
     it('have transform functions', () => {
@@ -114,8 +114,38 @@ describe('', () => {
         width: units.pct(50)
       });
 
-      expect(halfButton.cache).toBe('.class1 {width:50%;color:#0000ff;} ');
+      expect(halfButton.getStyle()).toBe('.class1 {width:50%;color:#0000ff;} ');
     })
+
+    it('can remove', () => {
+      const Button = CSS({
+        color: color.blue
+      });
+
+      write(`<div id="test" class="${Button}"></div>`);
+
+      expect(document.getElementById('test').className).toBe('class0');
+
+      Button.remove();
+
+      expect(document.getElementById('test').className).toBe('class1');
+    });
+
+    it('can refresh', () => {
+      const Button = CSS({
+        color: color.blue
+      });
+
+      write(`<div id="test" class="${Button}"></div>`);
+
+      expect(document.getElementById('test').className).toBe('class0');
+
+      Button.refresh();
+
+      expect(document.getElementById('test').className).toBe('class1');
+      expect(getSheet().cssRules[1].selectorText).toBe('.class1');
+      expect(getSheet().cssRules[1].style.color).toBe(color.blue);
+    });
 
     it('convert pseudo-elements', () => {
       CSS({
@@ -205,14 +235,14 @@ describe('', () => {
         maxWidth: '480px',
         maxHeight: '720px'
       }).toString()).toMatch(/^@media/);
-    })
+    });
 
     it('can turn mediaQuery into functions', () => {
       expect(typeof MediaQuery({
         maxWidth: '480px',
         maxHeight: '720px'
       })).toBe('function');
-    })
+    });
 
     it('can combine mediaQueries', () => {
       expect(MediaQuery(MediaQuery({
@@ -222,6 +252,21 @@ describe('', () => {
         maxWidth: '480px',
         maxHeight: '720px'
       })).toString()).toMatch(/^@media/);
+    });
+
+    it('can use mediaQuery', () => {
+      const mq = MediaQuery({
+        maxWidth: '480px',
+        maxHeight: '720px'
+      });
+
+      const foo = CSS({
+        [mq]: {
+          color: 'red'
+        }
+      });
+
+      expect(foo.getStyle()).toBe('.class0 {} @media screen and (max-width : 480px) and (max-height : 720px) { .class0 {color:red;}} ');
     })
   });
   
@@ -298,5 +343,67 @@ describe('', () => {
         }, 1001);
       })
     });
-  })
-})
+  });
+  
+  describe('Theme mangement', () => {
+    it('create a DynamicCSS', () => {
+      const myTheme = DynamicCSS({
+        mainColor: 'blue'
+      });
+
+      expect(myTheme.mainColor).toBe('@@0@@mainColor');
+      expect(myTheme.realValues).toEqual({
+        mainColor: 'blue'
+      });
+    });
+
+    it('can use a DynamicCSS', () => {
+      const Theme = DynamicCSS({
+        mainColor: 'blue'
+      });
+
+      const foo = CSS({
+        color: Theme.mainColor,
+      });
+
+      expect(getSheet().cssRules[0].style.color).toBe('blue');
+    });
+
+    it('can use multiple DynamicCSS', () => {
+      const Theme = DynamicCSS({
+        mainColor: 'blue'
+      });
+      const Layout = DynamicCSS({
+        mainWidth: '50px'
+      });
+
+      const foo = CSS({
+        color: Theme.mainColor,
+        width: Layout.mainWidth
+      });
+
+      expect(getSheet().cssRules[0].style.color).toBe('blue');
+      expect(getSheet().cssRules[0].style.width).toBe('50px');
+    });
+
+    it('refresh DynamicCSS values', () => {
+      const Theme = DynamicCSS({
+        mainColor: 'blue'
+      });
+
+      const foo = CSS({
+        color: Theme.mainColor,
+      });
+
+      write(`<div id="test" class="${foo}"></div>`);
+
+      expect(getSheet().cssRules[0].style.color).toBe('blue');
+
+      Theme.inject({
+        mainColor: 'red'
+      });
+
+      expect(getSheet().cssRules[1].style.color).toBe('red');
+    });
+  });
+});
