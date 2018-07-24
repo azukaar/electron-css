@@ -81,7 +81,7 @@ const DynamicCSS = (defaultValues = {}) => {
       if (typeof target[name] !== 'undefined') {
         return target[name];
       } else {
-        return '@@' + target.id + '@@' + name;
+        return '#@@' + target.id + '@@' + name;
       }
     },
     set: (target, name, value) => {
@@ -161,21 +161,13 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
       }
 
       if(typeof value !== 'string' && value.length) {
-        value = value.map((v) => {
-          if (v.match(/^@@/)) {
-            subscribeDynamicCSS(className, value, refresh);
-            return getDynamicRule(value);
-          } else {
-            return v;
-          }
-        })
         value = value.join(' ');
-      } else {
-        if (value.match(/^@@/)) {
-          subscribeDynamicCSS(className, value, refresh);
-          value = getDynamicRule(value);
-        }
       }
+
+      value = value.replace(/#@@\d+@@[a-zA-Z0-9_]+/g, (matched) => {
+        subscribeDynamicCSS(className, matched, refresh);
+        return getDynamicRule(matched);
+      });
 
       if (dashKey === 'content') {
         value = `"${value}"`;

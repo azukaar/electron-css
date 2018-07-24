@@ -5,6 +5,7 @@ import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS} from '.
 import color from '../src/color';
 import {borderStyle, transform} from '../src/constants';
 import units from '../src/units';
+import { runInDebugContext } from 'vm';
 
 document.body.innerHTML += '<div id="playground"></div>';
 
@@ -359,7 +360,7 @@ describe('', () => {
         mainColor: 'blue'
       });
 
-      expect(myTheme.mainColor).toBe('@@0@@mainColor');
+      expect(myTheme.mainColor).toBe('#@@0@@mainColor');
       expect(myTheme.realValues).toEqual({
         mainColor: 'blue'
       });
@@ -375,6 +376,33 @@ describe('', () => {
       });
 
       expect(getSheet().cssRules[0].style.color).toBe('blue');
+    });
+
+    it('can use a DynamicCSS in arrays', () => {
+      const Theme = DynamicCSS({
+        mainColor: 'blue'
+      });
+
+      const foo = CSS({
+        border: [Theme.mainColor, '1px', 'solid'],
+      });
+
+      expect(getSheet().cssRules[0].style.border).toMatch('blue');
+    });
+
+
+    it('can use a DynamicCSS in complex rules', () => {
+      const Coloring = DynamicCSS({
+        red: 120,
+        green: 10,
+        blue:90
+      });
+
+      const foo = CSS({
+        color: color.rgb(Coloring.red, Coloring.green, Coloring.blue),
+      });
+
+      expect(getSheet().cssRules[0].style.color).toMatch('rgb(120,10,90)');
     });
 
     it('can use multiple DynamicCSS', () => {
