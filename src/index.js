@@ -44,9 +44,9 @@ const getDynamicRule = (unparsed) => {
   return dynamicCssList[id].realValues[rule];
 }
 
-const subscribeDynamicCSS = (unparsed, cb) => {
+const subscribeDynamicCSS = (className, unparsed, cb) => {
   const id = unparsed.split('@@')[1];
-  dynamicCssList[id].subscribe(cb);
+  dynamicCssList[id].subscribe(className, cb);
 }
 
 const DynamicCSS = (defaultValues = {}) => {
@@ -54,17 +54,17 @@ const DynamicCSS = (defaultValues = {}) => {
   const result =  new Proxy({
     id: nextId,
     realValues: defaultValues,
-    subscribed: [],
-    subscribe(cb) {
-      if(this.subscribed.indexOf(cb) === -1) {
-        this.subscribed.push(cb); 
-      }
+    subscribed: {},
+    subscribe(className, cb) {
+      this.subscribed[className] = cb;
     },
     refresh() {
-      this.subscribed.forEach((cb, key) => {
-        const isAlive = cb();
-        if(!isAlive) {
-          this.subscribed.splice(key, 1);
+      const oldSubs = Object.assign({}, this.subscribed);
+      this.subscribed = {};
+
+      Object.keys(oldSubs).forEach((className) => {
+        if(document.getElementsByClassName(className).length) {
+          oldSubs[className]();
         }
       })
     },
@@ -163,7 +163,7 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
       if(typeof value !== 'string' && value.length) {
         value = value.map((v) => {
           if (v.match(/^@@/)) {
-            subscribeDynamicCSS(value, refresh);
+            subscribeDynamicCSS(className, value, refresh);
             return getDynamicRule(value);
           } else {
             return v;
@@ -172,7 +172,7 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
         value = value.join(' ');
       } else {
         if (value.match(/^@@/)) {
-          subscribeDynamicCSS(value, refresh);
+          subscribeDynamicCSS(className, value, refresh);
           value = getDynamicRule(value);
         }
       }
@@ -227,12 +227,13 @@ const CSS = function (rules) {
       const oldCN = className;
       className = 'class' + randomId();
       Array.from(document.getElementsByClassName(oldCN)).forEach( (element) => {
-        if (!existed) {
-          callbackOnFirstSwap();
-        }
-        existed = true;
-        element.className = element.className.replace(oldCN, className);
+          if (!existed) {
+            callbackOnFirstSwap();
+          }
+          existed = true;
+          element.className = element.className.replace(oldCN, className);
       });
+
       return existed;
     },
 
@@ -358,7 +359,6 @@ const MediaQuery = function (...set) {
 
   let media = function () {
     return arrayValues.some((value) => {
-      console.log(value.stringified, matchMedia(value.stringified).matches)
       return matchMedia(value.stringified).matches
     });
   }

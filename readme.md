@@ -122,6 +122,29 @@ const bar = CSS({
 
 Note: `asParent` is a special pseudo element added to test if the current element is a child of another.
 
+## Dynamic CSS
+
+If you ever used theming in CSS you probably noticed that every JS framework have their own solutions, with various success (mainly because it means using themes in your template), for example as providers for context in React.
+Electron CSS comes with a new systeme DynamicCSS. It's a way to declare a patch-able set of rules you can re-use in your code.
+Whenever you will overwrite those rules, it will patch your stylesheet accordingly in real time.
+
+You can play with it here : https://jsfiddle.net/wrme0pz7/122/
+
+```javascript
+const Theme = DynamicCSS({
+  MainColor: 'red'
+});
+
+const foo = CSS({
+    color: Theme.MainColor // foo will have a red color
+});
+
+// later 
+
+Theme.use(someThirdPartyBlueTheme);
+// foo now have a blue color
+```
+
 ## Animations
 
 Animations are also JS object which also prevent name clashes. Warning : Animations dont get Garbage collected.
