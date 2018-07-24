@@ -101,7 +101,15 @@ describe('', () => {
     it('have transform functions', () => {
       expect(transform.rotate(units.deg(0), units.deg(90))).toBe('rotate(0deg, 90deg)');
       expect(transform.rotate(units.deg(90))).toBe('rotate(90deg, 0)');
-    })
+    });
+
+    it('have all transform functions', () => {
+      Object.keys(transform).forEach((functionName) => {
+        if(typeof transform[functionName] === 'function') {
+          expect(transform[functionName](0)).toMatch(functionName)
+        }
+      })
+    });
 
     it('can inherit', () => {
       const Button = CSS({
