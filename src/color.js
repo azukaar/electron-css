@@ -1,4 +1,16 @@
 const color = {
+  rgb(r,g,b) {
+    return `rgb(${r},${g},${b})`;
+  },
+  rgba(r,g,b,a) {
+    return `rgba(${r},${g},${b},${a})`;
+  },
+  hex(h) {
+    return `#${h}`;
+  },
+  hsl(h,s,l) {
+    return `hsl(${h},${s},${l})`;
+  },
   'aliceblue': '#f0f8ff',
   'antiquewhite': '#faebd7',
   'aqua': '#00ffff',

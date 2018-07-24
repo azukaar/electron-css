@@ -13,6 +13,13 @@ describe('color', () => {
           .toBe('repeating-radial-gradient(closest-side at 60% 55%, #ff0000, #ffff00, #000000)');
   });
 
+  it('have helpers', () => {
+    expect(color.rgb(0,0,0)).toBe('rgb(0,0,0)');
+    expect(color.rgba(0,0,0,0)).toBe('rgba(0,0,0,0)');
+    expect(color.hex('000000')).toBe('#000000');
+    expect(color.hsl(0,0,0)).toBe('hsl(0,0,0)');
+  });
+
   it('can darken color', () => {
     expect(color.darken(color.red, 0.1)).toBe('#e60000');
   });
