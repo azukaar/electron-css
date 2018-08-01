@@ -164,10 +164,12 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
         value = value.join(' ');
       }
 
-      value = value.replace(/#@@\d+@@[a-zA-Z0-9_]+/g, (matched) => {
-        subscribeDynamicCSS(className, matched, refresh);
-        return getDynamicRule(matched);
-      });
+      if(value.replace) {
+        value = value.replace(/#@@\d+@@[a-zA-Z0-9_]+/g, (matched) => {
+          subscribeDynamicCSS(className, matched, refresh);
+          return getDynamicRule(matched);
+        });
+      }
 
       if (dashKey === 'content') {
         value = `"${value}"`;
