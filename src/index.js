@@ -102,7 +102,7 @@ const resetCSS = function () {
   const element = document.getElementById('_electron_css_sheet');
   const stylesheet = document.createElement('style');
   stylesheet.id = '_electron_css_sheet';
-  document.body.replaceChild(stylesheet, element);
+  document.head.replaceChild(stylesheet, element);
 }
 
 const clearCSS = function (_i = 0) {
@@ -384,11 +384,11 @@ const calc = function(...elements) {
 if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
   const stylesheet = document.createElement('style');
   stylesheet.id = '_electron_css_sheet';
-  document.body.appendChild(stylesheet);
+  document.head.appendChild(stylesheet);
 
   const stylesheetKeyframes = document.createElement('style');
   stylesheetKeyframes.id = '_electron_css_sheet_keyframes';
-  document.body.appendChild(stylesheetKeyframes);
+  document.head.appendChild(stylesheetKeyframes);
 
   clearCSS();
 }
