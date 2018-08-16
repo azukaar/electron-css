@@ -255,16 +255,16 @@ const foo = CSS();
 const foo2 = CSS();
 
 <div className={classes({
-        foo,
-        bar : false,
+        [foo],
+        [bar] : false,
         something: true
       })}>test</div>
 
-// classes() will return 'foo something'
+// classes() will return 'class0, something'
 
 <div className={classes([
-        foo,
-        foo2
+        [foo],
+        [foo2]
       ])}>test</div>
 
 // classes() will return 'class0, class1'
