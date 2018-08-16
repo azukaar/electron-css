@@ -5,6 +5,12 @@ import constants from './constants';
 
 let testCounter = 0;
 
+let rootElement = document.head;
+
+const setRootElement = (element) => {
+  rootElement = element;
+}
+
 const pseudoClassList = [
   'active', 'checked', 'disabled', 'empty', 'enabled', 'focus',
   'hover', 'invalid', 'link', 'read-only', 'required', 'valid', 'visited',
@@ -103,7 +109,7 @@ const resetCSS = function () {
   if(element) {
     const stylesheet = document.createElement('style');
     stylesheet.id = 'generated_css_target_sheet';
-    document.head.replaceChild(stylesheet, element);
+    rootElement.replaceChild(stylesheet, element);
   }
 }
 
@@ -391,11 +397,11 @@ function createTargetStyle() {
   if (typeof document !== 'undefined' && !document.getElementById('generated_css_target_sheet')) {
     const stylesheet = document.createElement('style');
     stylesheet.id = 'generated_css_target_sheet';
-    document.head.appendChild(stylesheet);
+    rootElement.appendChild(stylesheet);
 
     const stylesheetKeyframes = document.createElement('style');
     stylesheetKeyframes.id = 'generated_css_target_sheet_keyframes';
-    document.head.appendChild(stylesheetKeyframes);
+    rootElement.appendChild(stylesheetKeyframes);
 
     clearCSS();
   }
@@ -408,6 +414,7 @@ export {
   Keyframes,
   MediaQuery,
   classes,
+  setRootElement,
   color,
   units,
   constants,

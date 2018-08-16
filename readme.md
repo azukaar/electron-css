@@ -405,6 +405,12 @@ Manually anchor your style anywhere by providing this snippet.
 <style id="generated_css_target_sheet_keyframes"></style>
 ```
 
+You can also pass a custom element in
+
+```js
+setRootElement(myCustomAnchor);
+```
+
 # Examples 
 
 ## React
