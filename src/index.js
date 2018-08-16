@@ -99,14 +99,17 @@ const DynamicCSS = (defaultValues = {}) => {
 
 const resetCSS = function () {
   testCounter = 0;
-  const element = document.getElementById('_electron_css_sheet');
-  const stylesheet = document.createElement('style');
-  stylesheet.id = '_electron_css_sheet';
-  document.head.replaceChild(stylesheet, element);
+  const element = document.getElementById('generated_css_target_sheet');
+  if(element) {
+    const stylesheet = document.createElement('style');
+    stylesheet.id = 'generated_css_target_sheet';
+    document.head.replaceChild(stylesheet, element);
+  }
 }
 
 const clearCSS = function (_i = 0) {
-  const stylesheet = document.getElementById('_electron_css_sheet');
+  createTargetStyle();
+  const stylesheet = document.getElementById('generated_css_target_sheet');
   let sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
   let nbToIt = Math.floor(sheet.cssRules.length / 2);
   nbToIt = nbToIt < 30 ? 30 : nbToIt;
@@ -189,8 +192,9 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
 }
 
 const CSS = function (rules) {
+  createTargetStyle();
   let className = 'class' + randomId();
-  const stylesheet = document.getElementById('_electron_css_sheet');
+  const stylesheet = document.getElementById('generated_css_target_sheet');
   const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
   let temp = '';
 
@@ -299,6 +303,7 @@ const CSS = function (rules) {
 }
 
 const Keyframes = function (rules) {
+  createTargetStyle();
   const keysName = 'keys' + randomId();
   let result = '';
 
@@ -318,7 +323,7 @@ const Keyframes = function (rules) {
     result  = rules;
   }
 
-  document.getElementById('_electron_css_sheet_keyframes').innerHTML += `
+  document.getElementById('generated_css_target_sheet_keyframes').innerHTML += `
     @keyframes ${keysName} {
       ${result}
     }
@@ -328,6 +333,7 @@ const Keyframes = function (rules) {
 }
 
 const MediaQuery = function (...set) {
+  createTargetStyle();
   let arrayValues = [];
 
   for(let mediaQueryIndex in set) {
@@ -381,16 +387,18 @@ const calc = function(...elements) {
   return 'calc('+elements.join(' ')+')';
 }
 
-if (typeof document !== 'undefined' && !document.getElementById('_electron_css_sheet')) {
-  const stylesheet = document.createElement('style');
-  stylesheet.id = '_electron_css_sheet';
-  document.head.appendChild(stylesheet);
+function createTargetStyle() {
+  if (typeof document !== 'undefined' && !document.getElementById('generated_css_target_sheet')) {
+    const stylesheet = document.createElement('style');
+    stylesheet.id = 'generated_css_target_sheet';
+    document.head.appendChild(stylesheet);
 
-  const stylesheetKeyframes = document.createElement('style');
-  stylesheetKeyframes.id = '_electron_css_sheet_keyframes';
-  document.head.appendChild(stylesheetKeyframes);
+    const stylesheetKeyframes = document.createElement('style');
+    stylesheetKeyframes.id = 'generated_css_target_sheet_keyframes';
+    document.head.appendChild(stylesheetKeyframes);
 
-  clearCSS();
+    clearCSS();
+  }
 }
 
 export {

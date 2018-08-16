@@ -8,7 +8,10 @@ Proper, framework agnostic Style in JS library, without any of the fuss of CSS
 
 JSFIddle: https://jsfiddle.net/wrme0pz7/54/
 
-Getting Started: https://medium.com/@azukaar/stop-using-css-in-js-and-welcome-proper-styling-in-js-with-electron-css-d28536ba3e85
+Getting Started:
+https://medium.com/@azukaar/stop-using-css-in-js-and-welcome-proper-styling-in-js-with-electron-css-d28536ba3e85
+Dynamic Themes: 
+https://itnext.io/create-powerful-dynamic-themes-and-layouts-using-electroncss-0-10-4c15654f9e7d
 
 # Style in JS ?
 
@@ -26,6 +29,8 @@ npm install electron-css
 ```
 
 ## Basic
+
+Anywhere in your JS, generate some Style using the `CSS` function.
 
 ```js
 const someStyle = CSS('color: red');
@@ -129,6 +134,8 @@ Electron CSS comes with a new systeme DynamicCSS. It's a way to declare a patch-
 Whenever you will overwrite those rules, it will patch your stylesheet accordingly in real time.
 
 You can play with it here : https://jsfiddle.net/wrme0pz7/122/
+
+More here : https://itnext.io/create-powerful-dynamic-themes-and-layouts-using-electroncss-0-10-4c15654f9e7d
 
 ```javascript
 const Theme = DynamicCSS({
@@ -388,6 +395,15 @@ const halfButton = CSS({
 This way you don't have to use both Button and halfButton on your actual HTML element, and the result won't depend on wether or not you registered halfButton after Button, making it less likely to cause issues in your app.
 
 Don't worry about having multiple `width` in your CSS : because object keys are uniques in JS, the resulting styling won't have duplicated rules.
+
+# Anchor
+
+Manually anchor your style anywhere by providing this snippet.
+
+```html
+<style id="generated_css_target_sheet"></style>
+<style id="generated_css_target_sheet_keyframes"></style>
+```
 
 # Examples 
 

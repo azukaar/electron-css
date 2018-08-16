@@ -10,7 +10,7 @@ import { runInDebugContext } from 'vm';
 document.body.innerHTML += '<div id="playground"></div>';
 
 function getSheet() {
-  const stylesheet = document.getElementById('_electron_css_sheet');
+  const stylesheet = document.getElementById('generated_css_target_sheet');
   const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
 
   return sheet
@@ -281,7 +281,7 @@ describe('', () => {
   
   describe('Style management', () => {
     it('create a style element', () => {
-      expect(document.getElementById('_electron_css_sheet')).not.toBe(null);
+      expect(document.getElementById('generated_css_target_sheet')).not.toBe(null);
     });
 
     it('allow spreading classes', () => {
