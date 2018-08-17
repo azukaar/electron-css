@@ -398,7 +398,7 @@ Don't worry about having multiple `width` in your CSS : because object keys are 
 
 # Anchor
 
-Manually anchor your style anywhere by providing this snippet.
+Manually anchor your style anywhere by providing this snippet. You can also change the `document` used.
 
 ```html
 <style id="generated_css_target_sheet"></style>
@@ -409,6 +409,7 @@ You can also pass a custom element in
 
 ```js
 setRootElement(myCustomAnchor);
+setDocumentElement(alternativeDocuments);
 ```
 
 # Examples 

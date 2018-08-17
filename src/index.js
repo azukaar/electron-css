@@ -5,10 +5,15 @@ import constants from './constants';
 
 let testCounter = 0;
 
+let documentElement = document;
 let rootElement = document.head;
 
 const setRootElement = (element) => {
   rootElement = element;
+}
+
+const setDocumentElement = (element) => {
+  documentElement = element;
 }
 
 const pseudoClassList = [
@@ -69,7 +74,7 @@ const DynamicCSS = (defaultValues = {}) => {
       this.subscribed = {};
 
       Object.keys(oldSubs).forEach((className) => {
-        if(document.getElementsByClassName(className).length) {
+        if(documentElement.getElementsByClassName(className).length) {
           oldSubs[className]();
         }
       })
@@ -105,9 +110,9 @@ const DynamicCSS = (defaultValues = {}) => {
 
 const resetCSS = function () {
   testCounter = 0;
-  const element = document.getElementById('generated_css_target_sheet');
+  const element = rootElement && rootElement.querySelector('#generated_css_target_sheet');
   if(element) {
-    const stylesheet = document.createElement('style');
+    const stylesheet = documentElement.createElement('style');
     stylesheet.id = 'generated_css_target_sheet';
     rootElement.replaceChild(stylesheet, element);
   }
@@ -115,7 +120,7 @@ const resetCSS = function () {
 
 const clearCSS = function (_i = 0) {
   createTargetStyle();
-  const stylesheet = document.getElementById('generated_css_target_sheet');
+  const stylesheet = rootElement && rootElement.querySelector('#generated_css_target_sheet');
   let sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
   let nbToIt = Math.floor(sheet.cssRules.length / 2);
   nbToIt = nbToIt < 30 ? 30 : nbToIt;
@@ -127,14 +132,14 @@ const clearCSS = function (_i = 0) {
       if (sheet.cssRules[i] && sheet.cssRules[i].selectorText) {
         const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0];
 
-        if (document.getElementsByClassName(className).length === 0) {
+        if (documentElement.getElementsByClassName(className).length === 0) {
           sheet.deleteRule(i);
         }
       } else if(sheet.cssRules[i]){
         Array.from(sheet.cssRules[i].cssRules).forEach( (value) => {
           const className = value.selectorText.split('.')[1].split(':')[0];
 
-          if (document.getElementsByClassName(className).length === 0) {
+          if (documentElement.getElementsByClassName(className).length === 0) {
             sheet.deleteRule(i);
           }
         });
@@ -198,10 +203,7 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
 }
 
 const CSS = function (rules) {
-  createTargetStyle();
   let className = 'class' + randomId();
-  const stylesheet = document.getElementById('generated_css_target_sheet');
-  const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
   let temp = '';
 
   const result = {
@@ -215,6 +217,10 @@ const CSS = function (rules) {
     },
     
     inject() {
+      createTargetStyle();
+      const stylesheet = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+      const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
+
       const ruleArray = this.getStyle().split('}');
       ruleArray.pop();
       ruleArray.filter(v=>v.length).forEach(rule => {
@@ -230,7 +236,7 @@ const CSS = function (rules) {
       let existed = false;
       const oldCN = className;
       className = 'class' + randomId();
-      Array.from(document.getElementsByClassName(oldCN)).forEach( (element) => {
+      Array.from(documentElement.getElementsByClassName(oldCN)).forEach( (element) => {
           if (!existed) {
             callbackOnFirstSwap();
           }
@@ -247,6 +253,10 @@ const CSS = function (rules) {
     },
     
     toString() {
+      createTargetStyle();
+      const stylesheet = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+      const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
+
       if (!Array.from(sheet.cssRules).some(r => r.selectorText === '.' + className)) {
         this.inject();
       }
@@ -329,7 +339,7 @@ const Keyframes = function (rules) {
     result  = rules;
   }
 
-  document.getElementById('generated_css_target_sheet_keyframes').innerHTML += `
+  rootElement.querySelector('#generated_css_target_sheet_keyframes').innerHTML += `
     @keyframes ${keysName} {
       ${result}
     }
@@ -394,12 +404,12 @@ const calc = function(...elements) {
 }
 
 function createTargetStyle() {
-  if (typeof document !== 'undefined' && !document.getElementById('generated_css_target_sheet')) {
-    const stylesheet = document.createElement('style');
+  if (typeof rootElement !== 'undefined' && !rootElement.querySelector('#generated_css_target_sheet')) {
+    const stylesheet = documentElement.createElement('style');
     stylesheet.id = 'generated_css_target_sheet';
     rootElement.appendChild(stylesheet);
 
-    const stylesheetKeyframes = document.createElement('style');
+    const stylesheetKeyframes = documentElement.createElement('style');
     stylesheetKeyframes.id = 'generated_css_target_sheet_keyframes';
     rootElement.appendChild(stylesheetKeyframes);
 
