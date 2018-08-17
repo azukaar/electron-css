@@ -425,6 +425,7 @@ export {
   MediaQuery,
   classes,
   setRootElement,
+  setDocumentElement,
   color,
   units,
   constants,
