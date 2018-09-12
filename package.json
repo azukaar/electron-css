@@ -10,8 +10,7 @@
     "test": "cross-env NODE_ENV=test jest",
     "test-ci": "cross-env NODE_ENV=test jest --coverage; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-serve",
-    "build": "webpack -p",
-    "prepublish": "npm run build; npm run test"
+    "build": "webpack"
   },
   "serve": {
     "content": [

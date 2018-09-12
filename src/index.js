@@ -130,14 +130,14 @@ const clearCSS = function (_i = 0) {
     if (_i > sheet.cssRules.length) _i = 0;
     for (let i = _i; i < _i + nbToIt; i++) {
       if (sheet.cssRules[i] && sheet.cssRules[i].selectorText) {
-        const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0];
+        const className = sheet.cssRules[i].selectorText.split('.')[1].split(':')[0].split(' ')[0];
 
         if (documentElement.getElementsByClassName(className).length === 0) {
           sheet.deleteRule(i);
         }
       } else if(sheet.cssRules[i]){
         Array.from(sheet.cssRules[i].cssRules).forEach( (value) => {
-          const className = value.selectorText.split('.')[1].split(':')[0];
+          const className = value.selectorText.split('.')[1].split(':')[0].split(' ')[0];
 
           if (documentElement.getElementsByClassName(className).length === 0) {
             sheet.deleteRule(i);
