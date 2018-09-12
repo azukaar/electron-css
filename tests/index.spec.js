@@ -43,6 +43,33 @@ describe('', () => {
       expect(getSheet().cssRules[0].style.color).toBe('red');
     });
 
+    it('can select an element', () => {
+      CSS({
+        color: 'red',
+        img: {
+          color: 'blue'
+        }
+      });
+
+      expect(getSheet().cssRules[0].style.color).toBe('red');
+      expect(getSheet().cssRules[1].style.color).toBe('blue');
+      expect(getSheet().cssRules[1].selectorText).toBe('img .class0');
+    });
+
+    it('can select a children', () => {
+      CSS({
+        color: 'red',
+
+        [CSS.next('img')]: {
+          color: 'blue'
+        }
+      });
+
+      expect(getSheet().cssRules[0].style.color).toBe('red');
+      expect(getSheet().cssRules[1].style.color).toBe('blue');
+      expect(getSheet().cssRules[1].selectorText).toBe('.class0 img');
+    });
+
     it('Can use constants', () => {
       CSS({
         color: color.red,

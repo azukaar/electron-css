@@ -164,7 +164,9 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
       const eventKey = caseConvert(key.replace(/^on[A-Z]/, match => match.substr(-1).toLowerCase()));
 
       master += jsonToCss(_css[key], className + ':' + eventKey);
-    } else if (key.match(/^\./)) {
+    } else if (typeof _css[key] !== null && typeof _css[key] === 'object' && !Array.isArray(_css[key]) && key.match(/^>/)) {
+      master += jsonToCss(_css[key], className + ' ' + key.substr(2));
+    } else if (typeof _css[key] !== null && typeof _css[key] === 'object' && !Array.isArray(_css[key])) {
       master += key + ' ' + jsonToCss(_css[key], className);
     } else {
       const dashKey = caseConvert(key);
@@ -317,6 +319,8 @@ const CSS = function (rules) {
 
   return result;
 }
+
+CSS.next = (selector) => '> ' + selector;
 
 const Keyframes = function (rules) {
   createTargetStyle();

@@ -412,6 +412,45 @@ setRootElement(myCustomAnchor);
 setDocumentElement(alternativeDocuments);
 ```
 
+## Give me back my selector
+
+Despite of having a non-selector philosophy, Electron will allow you to use some for some special cases. (like styling user input). Here is how.
+
+```javascript
+// will style Button inside of img 
+const Button = CSS({
+    img: {
+        color: color.blue
+    }
+});
+
+// will style Button inside of img inside of div
+const Button = CSS({
+    'div img': {
+        color: color.blue
+    }
+});
+```
+
+As for classname, what you define inside Button as selector are the parents !!
+If you want to have old style left to right selector use the 'next' helper (which actually prepend a '>')
+
+```javascript
+// will style img inside of div inside Button 
+const Button = CSS({
+    [CSS.next('div img')]: {
+        color: color.blue
+    }
+});
+
+// will style img inside of div inside Button 
+const Button = CSS({
+    '> div img': {
+        color: color.blue
+    }
+});
+```
+
 # Examples 
 
 ## React
