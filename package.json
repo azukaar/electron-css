@@ -1,6 +1,6 @@
 {
   "name": "electron-css",
-  "version": "0.13.0",
+  "version": "0.13.2",
   "description": "Proper, framework agnostic Style in JS library, without any of the fuss of CSS",
   "main": "dist/index.js",
   "files": [
@@ -10,7 +10,8 @@
     "test": "cross-env NODE_ENV=test jest",
     "test-ci": "cross-env NODE_ENV=test jest --coverage; cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-serve",
-    "build": "webpack -p"
+    "build": "webpack -p",
+    "prepublish": "npm run test; npm run build"
   },
   "serve": {
     "content": [
