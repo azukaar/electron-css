@@ -425,7 +425,7 @@ function createTargetStyle() {
 
 const is = {};
 
-pseudoFunctionsList.forEach((name) => is[name] = (arg) => `:${caseConvert(name)}(${arg})`.replace('(:', '('));
+pseudoFunctionsList.forEach((name) => is[name] = (arg) => `:${caseConvert(name)}(${arg})`);
 
 export {
   CSS,

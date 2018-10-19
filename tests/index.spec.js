@@ -251,9 +251,9 @@ describe('', () => {
         }
       });
 
-      expect(is.not(is.nthChild(1))).toBe(':not(nth-child(1))');
+      expect(is.not(is.nthChild(1))).toBe(':not(:nth-child(1))');
       expect(getSheet().cssRules[0].style.color).toBe('red');
-      expect(getSheet().cssRules[1].selectorText).toBe('.class0:not(nth-child(1))');
+      expect(getSheet().cssRules[1].selectorText).toBe('.class0:not(:nth-child(1))');
     });
   });
 
