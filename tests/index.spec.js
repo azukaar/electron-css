@@ -1,7 +1,7 @@
 import * as CONSTANTS from '../src/config';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS} from '../src/index';
+import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS, is} from '../src/index';
 import color from '../src/color';
 import {borderStyle, transform} from '../src/constants';
 import units from '../src/units';
@@ -241,6 +241,19 @@ describe('', () => {
       expect(getSheet().cssRules[1].style.color).toBe('red');
       expect(getSheet().cssRules[2].style.color).toBe('blue');
       expect(getSheet().cssRules[2].selectorText).toBe('.class0:hover:focus .class1');
+    });
+
+    it('use self referencing pseudo-elements function', () => {
+      CSS({
+        color: 'red',
+        [is.not(is.nthChild(1))]: {
+          color: 'blue'
+        }
+      });
+
+      expect(is.not(is.nthChild(1))).toBe(':not(nth-child(1))');
+      expect(getSheet().cssRules[0].style.color).toBe('red');
+      expect(getSheet().cssRules[1].selectorText).toBe('.class0:not(nth-child(1))');
     });
   });
 

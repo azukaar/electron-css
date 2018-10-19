@@ -164,6 +164,8 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
       const eventKey = caseConvert(key.replace(/^on[A-Z]/, match => match.substr(-1).toLowerCase()));
 
       master += jsonToCss(_css[key], className + ':' + eventKey);
+    }  else if (key.match(/^:/)) {
+      master += jsonToCss(_css[key], className + key);
     } else if (typeof _css[key] !== null && typeof _css[key] === 'object' && !Array.isArray(_css[key]) && key.match(/^>/)) {
       master += jsonToCss(_css[key], className + ' ' + key.substr(2));
     } else if (typeof _css[key] !== null && typeof _css[key] === 'object' && !Array.isArray(_css[key])) {
@@ -421,6 +423,10 @@ function createTargetStyle() {
   }
 }
 
+const is = {};
+
+pseudoFunctionsList.forEach((name) => is[name] = (arg) => `:${caseConvert(name)}(${arg})`.replace('(:', '('));
+
 export {
   CSS,
   calc,
@@ -432,6 +438,7 @@ export {
   setDocumentElement,
   color,
   units,
+  is,
   constants,
   DynamicCSS
 };
