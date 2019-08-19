@@ -208,8 +208,8 @@ const jsonToCss = function (_css, className = "", refresh = () => { }) {
   }
 }
 
-const CSS = function (rules) {
-  let className = 'class' + randomId();
+const CSS = function (rules, name = 'class') {
+  let className = name + randomId();
   let temp = '';
 
   const result = {
@@ -242,7 +242,7 @@ const CSS = function (rules) {
     remove(callbackOnFirstSwap = () => { }) {
       let existed = false;
       const oldCN = className;
-      className = 'class' + randomId();
+      className = name + randomId();
       Array.from(documentElement.getElementsByClassName(oldCN)).forEach((element) => {
         if (!existed) {
           callbackOnFirstSwap();

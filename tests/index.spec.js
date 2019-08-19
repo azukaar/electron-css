@@ -3,11 +3,9 @@ CONSTANTS.GC_COLLECT_TIME = 1000;
 
 import { CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS, is } from '../src/index';
 import color from '../src/color';
-import constants from '../src/constants';
+import { borderStyle, transform } from '../src/constants';
 import units from '../src/units';
 import { runInDebugContext } from 'vm';
-
-const { borderStyle, transform } = constants;
 
 document.body.innerHTML += '<div id="playground"></div>';
 
@@ -31,6 +29,10 @@ describe('', () => {
   describe('Class Creation', () => {
     it('can create a class', () => {
       expect(CSS('').toString()).toMatch(/^class/);
+    });
+
+    it('can create a class with a custom classname', () => {
+      expect(CSS('', 'test').toString()).toMatch(/^test/);
     });
 
     it('append the CSS to the class', () => {
