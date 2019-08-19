@@ -208,6 +208,14 @@ const jsonToCss = function (_css, className = "", refresh = () => { }) {
   }
 }
 
+type CSSElement = {
+  onActive, onChecked, onDisabled, onEmpty, onEnabled, onFocus,
+  onHover, onInvalid, onLink, onReadOnly, onRequired, onValid, onVisited,
+  onLastOfType, onOnlyOfType, onOnlyChild, onOptional, oOnutOfRange, onFirstLine, onFirstLetter,
+  asParent, 
+  nthChild, lang, not, nthLstChild, nthLastOfType, nthOfType,
+}
+
 type CSSResult = {
   getStyle(): string;
   inject(): void;
@@ -217,7 +225,7 @@ type CSSResult = {
   inherit(): any;
 }
 
-const CSS = function (rules, name = 'class') : CSSResult & string {
+const CSS = function (rules, name = 'class') : CSSResult & CSSElement & string {
   let className = name + randomId();
   let temp = '';
 
@@ -286,7 +294,7 @@ const CSS = function (rules, name = 'class') : CSSResult & string {
     }
   };
 
-  const patchForPseudoElement = (className, object) => {
+  const patchForPseudoElement = (className, object) : CSSElement => {
     pseudoClassList.forEach(pc => {
       let methodName = pc.replace(/^[a-z]/, match => match.toUpperCase());
       let realMethodName = caseConvert(pc);
@@ -333,7 +341,7 @@ const CSS = function (rules, name = 'class') : CSSResult & string {
 
   result.inject();
 
-  return result as CSSResult & string;
+  return result as CSSResult & CSSElement & string;
 }
 
 CSS.next = (selector) => '> ' + selector;
@@ -438,9 +446,35 @@ function createTargetStyle() {
   }
 }
 
-const is = {};
+const is = {
+  'active': (arg) => `:active(${arg})`,
+  'checked': (arg) => `:checked(${arg})`,
+  'disabled': (arg) => `:disabled(${arg})`,
+  'empty': (arg) => `:empty(${arg})`,
+  'enabled': (arg) => `:enabled(${arg})`,
+  'focus': (arg) => `:focus(${arg})`,
+  'hover': (arg) => `:hover(${arg})`,
+  'invalid': (arg) => `:invalid(${arg})`,
+  'link': (arg) => `:link(${arg})`,
+  'readOnly': (arg) => `:read-only(${arg})`,
+  'required': (arg) => `:required(${arg})`,
+  'valid': (arg) => `:valid(${arg})`,
+  'visited': (arg) => `:visited(${arg})`,
+  'lastOfType': (arg) => `:last-of-type(${arg})`,
+  'onlyOfType': (arg) => `:only-of-type(${arg})`,
+  'onlyChild': (arg) => `:only-child(${arg})`,
+  'optional': (arg) => `:optional(${arg})`,
+  'outOfRange': (arg) => `:out-of-range(${arg})`,
+  'firstLine': (arg) => `:first-line(${arg})`,
+  'firstLetter': (arg) => `:first-letter(${arg})`,
+  'nthChild': (arg) => `:nth-child(${arg})`,
+  'lang': (arg) => `:lang(${arg})`,
+  'not': (arg) => `:not(${arg})`,
+  'nthLastChild': (arg) => `:nth-last-child(${arg})`,
+  'nthLastOfType': (arg) => `:nth-last-of-lype(${arg})`,
+  'nthOfType': (arg) => `:nth-of-type(${arg})`,
+};
 
-pseudoFunctionsList.forEach((name) => is[name] = (arg) => `:${caseConvert(name)}(${arg})`);
 
 export {
   CSS,
