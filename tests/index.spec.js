@@ -1,11 +1,13 @@
 import * as CONSTANTS from '../src/config';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
-import {CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS, is} from '../src/index';
+import { CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS, is } from '../src/index';
 import color from '../src/color';
-import {borderStyle, transform} from '../src/constants';
+import constants from '../src/constants';
 import units from '../src/units';
 import { runInDebugContext } from 'vm';
+
+const { borderStyle, transform } = constants;
 
 document.body.innerHTML += '<div id="playground"></div>';
 
@@ -38,7 +40,7 @@ describe('', () => {
     });
 
     it('convert JSON to CSS', () => {
-      CSS({color: 'red'});
+      CSS({ color: 'red' });
 
       expect(getSheet().cssRules[0].style.color).toBe('red');
     });
@@ -101,7 +103,7 @@ describe('', () => {
     });
 
     it('Can use units', () => {
-      for(let unit in units) {
+      for (let unit in units) {
         if (unit === 'pct') {
           expect(units[unit](1)).toBe('1%');
         } else {
@@ -123,7 +125,7 @@ describe('', () => {
     });
 
     it('add quotes to content', () => {
-      expect(CSS({content: 'hey'}).getStyle()).toBe('.class0 {content:"hey";} ');
+      expect(CSS({ content: 'hey' }).getStyle()).toBe('.class0 {content:"hey";} ');
     });
 
     it('have transform functions', () => {
@@ -133,7 +135,7 @@ describe('', () => {
 
     it('have all transform functions', () => {
       Object.keys(transform).forEach((functionName) => {
-        if(typeof transform[functionName] === 'function') {
+        if (typeof transform[functionName] === 'function') {
           expect(transform[functionName](0)).toMatch(functionName)
         }
       })
@@ -197,7 +199,7 @@ describe('', () => {
 
     it('link classes pseudo-elements', () => {
       const foo = CSS();
-      
+
       CSS({
         color: 'red',
         [foo.onHover]: {
@@ -213,7 +215,7 @@ describe('', () => {
 
     it('link classes pseudo functions', () => {
       const foo = CSS();
-      
+
       CSS({
         color: 'red',
         [foo.nthChild(1)]: {
@@ -229,7 +231,7 @@ describe('', () => {
 
     it('chains classes link pseudo-elements', () => {
       const foo = CSS();
-      
+
       CSS({
         color: 'red',
         [foo.onHover.onFocus]: {
@@ -267,7 +269,7 @@ describe('', () => {
         from: {
           color: 'red'
         },
-        to : {
+        to: {
           color: 'blue'
         }
       }).toString()).toMatch(/^keys/);
@@ -318,7 +320,7 @@ describe('', () => {
       expect(foo.getStyle()).toBe('.class0 {} @media screen and (max-width : 480px) and (max-height : 720px) { .class0 {color:red;}} ');
     })
   });
-  
+
   describe('Style management', () => {
     it('create a style element', () => {
       expect(document.getElementById('generated_css_target_sheet')).not.toBe(null);
@@ -329,7 +331,7 @@ describe('', () => {
 
       expect(classes({
         foo,
-        bar : false,
+        bar: false,
         something: true
       })).toBe('foo something');
     });
@@ -393,7 +395,7 @@ describe('', () => {
       })
     });
   });
-  
+
   describe('Theme mangement', () => {
     it('create a DynamicCSS', () => {
       const myTheme = DynamicCSS({
@@ -435,7 +437,7 @@ describe('', () => {
       const Coloring = DynamicCSS({
         red: 120,
         green: 10,
-        blue:90
+        blue: 90
       });
 
       const foo = CSS({

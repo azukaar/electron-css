@@ -1,4 +1,4 @@
-import {GC_COLLECT_TIME} from './config';
+import { GC_COLLECT_TIME } from './config';
 import color from './color';
 import units from './units';
 import constants from './constants';
@@ -19,7 +19,7 @@ const setDocumentElement = (element) => {
 const pseudoClassList = [
   'active', 'checked', 'disabled', 'empty', 'enabled', 'focus',
   'hover', 'invalid', 'link', 'read-only', 'required', 'valid', 'visited',
-  'lastOfType', 'onlyOfType', 'onlyChild', 'optional', 'outOfRange', 'firstLine', 'firstLetter', 
+  'lastOfType', 'onlyOfType', 'onlyChild', 'optional', 'outOfRange', 'firstLine', 'firstLetter',
 ];
 
 const pseudoFunctionsList = [
@@ -28,7 +28,7 @@ const pseudoFunctionsList = [
 
 const getEnv = function () {
   if (typeof global !== 'undefined' && global['process']
-        && global['process']['env'] && global['process']['env']['NODE_ENV']) {
+    && global['process']['env'] && global['process']['env']['NODE_ENV']) {
     return global['process']['env']['NODE_ENV'];
   } else {
     return 'production';
@@ -36,10 +36,10 @@ const getEnv = function () {
 }
 
 const randomId = function () {
-  if(getEnv() === 'test') {
+  if (getEnv() === 'test') {
     return testCounter++;
   } else {
-    return Date.now() + parseInt(Math.random() * 10000);
+    return Date.now() + Math.floor(Math.random() * 10000);
   }
 }
 
@@ -48,7 +48,7 @@ const dynamicCssList = [];
 const getDynamicRule = (unparsed) => {
   const id = unparsed.split('@@')[1];
   const rule = unparsed.split('@@')[2];
-  if(typeof dynamicCssList[id].realValues[rule] === 'undefined') {
+  if (typeof dynamicCssList[id].realValues[rule] === 'undefined') {
     console.error('ERROR CSS : ' + rule + ' doesn\'t exists on this dymamic rule set.');
     console.trace();
   }
@@ -62,7 +62,7 @@ const subscribeDynamicCSS = (className, unparsed, cb) => {
 
 const DynamicCSS = (defaultValues = {}) => {
   const nextId = dynamicCssList.length;
-  const result =  new Proxy({
+  const result = new Proxy({
     id: nextId,
     realValues: defaultValues,
     subscribed: {},
@@ -74,7 +74,7 @@ const DynamicCSS = (defaultValues = {}) => {
       this.subscribed = {};
 
       Object.keys(oldSubs).forEach((className) => {
-        if(documentElement.getElementsByClassName(className).length) {
+        if (documentElement.getElementsByClassName(className).length) {
           oldSubs[className]();
         }
       })
@@ -88,22 +88,22 @@ const DynamicCSS = (defaultValues = {}) => {
       this.refresh();
     }
   }, {
-    get: (target, name) => {
-      if (typeof target[name] !== 'undefined') {
-        return target[name];
-      } else {
-        return '#@@' + target.id + '@@' + name;
+      get: (target, name: string) => {
+        if (typeof target[name] !== 'undefined') {
+          return target[name];
+        } else {
+          return '#@@' + target.id + '@@' + name;
+        }
+      },
+      set: (target, name, value) => {
+        if (typeof target[name] !== 'undefined') {
+          target[name] = value;
+        } else {
+          target.realValues[name] = value;
+        }
+        return true;
       }
-    },
-    set: (target, name, value) => {
-      if (typeof target[name] !== 'undefined') {
-        target[name] = value;
-      } else {
-        target.realValues[name] = value;
-      }
-      return true;
-    }
-  });
+    });
   dynamicCssList.push(result);
   return result;
 };
@@ -111,7 +111,7 @@ const DynamicCSS = (defaultValues = {}) => {
 const resetCSS = function () {
   testCounter = 0;
   const element = rootElement && rootElement.querySelector('#generated_css_target_sheet');
-  if(element) {
+  if (element) {
     const stylesheet = documentElement.createElement('style');
     stylesheet.id = 'generated_css_target_sheet';
     rootElement.replaceChild(stylesheet, element);
@@ -120,12 +120,13 @@ const resetCSS = function () {
 
 const clearCSS = function (_i = 0) {
   createTargetStyle();
-  const stylesheet = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+  const stylesheet : HTMLStyleElement = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+  // @ts-ignore
   let sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
   let nbToIt = Math.floor(sheet.cssRules.length / 2);
   nbToIt = nbToIt < 30 ? 30 : nbToIt;
   nbToIt = nbToIt > 500 ? 500 : nbToIt;
-  
+
   if (sheet.cssRules) {
     if (_i > sheet.cssRules.length) _i = 0;
     for (let i = _i; i < _i + nbToIt; i++) {
@@ -135,8 +136,9 @@ const clearCSS = function (_i = 0) {
         if (documentElement.getElementsByClassName(className).length === 0) {
           sheet.deleteRule(i);
         }
-      } else if(sheet.cssRules[i]){
-        Array.from(sheet.cssRules[i].cssRules).forEach( (value) => {
+      } else if (sheet.cssRules[i]) {
+        Array.from(sheet.cssRules[i].cssRules).forEach((value) => {
+          // @ts-ignore
           const className = value.selectorText.split('.')[1].split(':')[0].split(' ')[0];
 
           if (documentElement.getElementsByClassName(className).length === 0) {
@@ -153,18 +155,18 @@ const caseConvert = function (str) {
   return str.replace(/[A-Z]/g, match => '-' + match.toLowerCase());
 }
 
-const jsonToCss = function (_css, className, refresh = () => {}) {
+const jsonToCss = function (_css, className = "", refresh = () => { }) {
   let master = '';
   let css = '';
 
   for (let key in _css) {
-    if(key.match(/^@media/)) {
+    if (key.match(/^@media/)) {
       master += jsonToCss(_css[key], key + '{ .' + className);
     } else if (key.match(/^on/)) {
       const eventKey = caseConvert(key.replace(/^on[A-Z]/, match => match.substr(-1).toLowerCase()));
 
       master += jsonToCss(_css[key], className + ':' + eventKey);
-    }  else if (key.match(/^:/)) {
+    } else if (key.match(/^:/)) {
       master += jsonToCss(_css[key], className + key);
     } else if (typeof _css[key] !== null && typeof _css[key] === 'object' && !Array.isArray(_css[key]) && key.match(/^>/)) {
       master += jsonToCss(_css[key], className + ' ' + key.substr(2));
@@ -174,15 +176,15 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
       const dashKey = caseConvert(key);
       let value = _css[key];
 
-      if(typeof value === 'undefined') {
+      if (typeof value === 'undefined') {
         throw new Error('CSS Error : Value for `' + dashKey + '` is undefined.');
       }
 
-      if(typeof value !== 'string' && value.length) {
+      if (typeof value !== 'string' && value.length) {
         value = value.join(' ');
       }
 
-      if(value.replace) {
+      if (value.replace) {
         value = value.replace(/#@@\d+@@[a-zA-Z0-9_]+/g, (matched) => {
           subscribeDynamicCSS(className, matched, refresh);
           return getDynamicRule(matched);
@@ -197,7 +199,7 @@ const jsonToCss = function (_css, className, refresh = () => {}) {
     }
   }
 
-  if(className && className.match(/^@media/)) {
+  if (className && className.match(/^@media/)) {
     return `${className} {${css}}} ${master}`;
   } else if (className) {
     return `.${className} {${css}} ${master}`;
@@ -219,16 +221,17 @@ const CSS = function (rules) {
       }
       return temp;
     },
-    
+
     inject() {
       createTargetStyle();
-      const stylesheet = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+      const stylesheet : HTMLStyleElement = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+      // @ts-ignore 
       const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
 
       const ruleArray = this.getStyle().split('}');
       ruleArray.pop();
-      ruleArray.filter(v=>v.length).forEach(rule => {
-        if(rule.match(/^\s*@media/)) {
+      ruleArray.filter(v => v.length).forEach(rule => {
+        if (rule.match(/^\s*@media/)) {
           sheet.insertRule(rule + '}}', sheet.cssRules.length);
         } else {
           sheet.insertRule(rule + '}', sheet.cssRules.length);
@@ -236,16 +239,16 @@ const CSS = function (rules) {
       });
     },
 
-    remove(callbackOnFirstSwap = () => {}) {
+    remove(callbackOnFirstSwap = () => { }) {
       let existed = false;
       const oldCN = className;
       className = 'class' + randomId();
-      Array.from(documentElement.getElementsByClassName(oldCN)).forEach( (element) => {
-          if (!existed) {
-            callbackOnFirstSwap();
-          }
-          existed = true;
-          element.className = element.className.replace(oldCN, className);
+      Array.from(documentElement.getElementsByClassName(oldCN)).forEach((element) => {
+        if (!existed) {
+          callbackOnFirstSwap();
+        }
+        existed = true;
+        element.className = element.className.replace(oldCN, className);
       });
 
       return existed;
@@ -255,12 +258,14 @@ const CSS = function (rules) {
       let existed = this.remove(() => this.inject());
       return existed;
     },
-    
+
     toString() {
       createTargetStyle();
-      const stylesheet = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+      const stylesheet : HTMLStyleElement = rootElement && rootElement.querySelector('#generated_css_target_sheet');
+      // @ts-ignore
       const sheet = stylesheet.sheet ? stylesheet.sheet : stylesheet.styleSheet;
 
+      // @ts-ignore
       if (!Array.from(sheet.cssRules).some(r => r.selectorText === '.' + className)) {
         this.inject();
       }
@@ -329,12 +334,12 @@ const Keyframes = function (rules) {
   const keysName = 'keys' + randomId();
   let result = '';
 
-  if(typeof rules !== 'string') {
-    for(let key in rules) {
-      const value = typeof rules[key] === 'string' ? 
+  if (typeof rules !== 'string') {
+    for (let key in rules) {
+      const value = typeof rules[key] === 'string' ?
         rules[key] : jsonToCss(rules[key])
 
-        result += `
+      result += `
           ${key} {
             ${value}
           }
@@ -342,7 +347,7 @@ const Keyframes = function (rules) {
     };
   }
   else {
-    result  = rules;
+    result = rules;
   }
 
   rootElement.querySelector('#generated_css_target_sheet_keyframes').innerHTML += `
@@ -358,21 +363,21 @@ const MediaQuery = function (...set) {
   createTargetStyle();
   let arrayValues = [];
 
-  for(let mediaQueryIndex in set) {
+  for (let mediaQueryIndex in set) {
     const mediaQuery = set[mediaQueryIndex];
     let stringified = '';
-    
+
     if (mediaQuery.arrayValues) {
       arrayValues = arrayValues.concat(mediaQuery.arrayValues);
     } else {
-      for(let ruleIndex in mediaQuery) {
+      for (let ruleIndex in mediaQuery) {
         stringified += `(${caseConvert(ruleIndex)} : ${mediaQuery[ruleIndex]}) and `;
       }
 
       stringified = stringified.substr(0, stringified.length - 4);
 
       const result = {}
-
+      // @ts-ignore
       result.stringified = stringified;
 
       arrayValues.push(result);
@@ -386,17 +391,18 @@ const MediaQuery = function (...set) {
   }
 
   media.toString = () => '@media screen and ' + arrayValues.map(v => v.stringified).join(', screen and ');
+  // @ts-ignore
   media.arrayValues = arrayValues;
 
   return media;
 }
 
 const classes = function (classes) {
-  if(Array.isArray(classes)) {
+  if (Array.isArray(classes)) {
     return classes.join(' ');
   } else {
     const result = [];
-    for(let cl in classes) {
+    for (let cl in classes) {
       if (classes[cl]) {
         result.push(cl);
       }
@@ -405,8 +411,8 @@ const classes = function (classes) {
   }
 }
 
-const calc = function(...elements) {
-  return 'calc('+elements.join(' ')+')';
+const calc = function (...elements) {
+  return 'calc(' + elements.join(' ') + ')';
 }
 
 function createTargetStyle() {
