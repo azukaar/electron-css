@@ -208,7 +208,14 @@ const jsonToCss = function (_css, className = "", refresh = () => { }) {
   }
 }
 
-const CSS = function (rules, name = 'class') {
+const CSS = function (rules, name = 'class') : {
+  getStyle(): string;
+  inject(): void;
+  remove(callbackOnFirstSwap?: () => void): boolean;
+  refresh(): any;
+  toString(): string;
+  inherit(): any;
+} | string {
   let className = name + randomId();
   let temp = '';
 

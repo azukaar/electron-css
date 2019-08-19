@@ -108,6 +108,8 @@ describe('', () => {
       for (let unit in units) {
         if (unit === 'pct') {
           expect(units[unit](1)).toBe('1%');
+        } else if (unit === 'inch') {
+          expect(units[unit](1)).toBe('1in');
         } else {
           expect(units[unit](1)).toBe('1' + unit);
         }
