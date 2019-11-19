@@ -2,10 +2,9 @@ import * as CONSTANTS from '../src/config';
 CONSTANTS.GC_COLLECT_TIME = 1000;
 
 import { CSS, calc, classes, resetCSS, Keyframes, MediaQuery, DynamicCSS, is } from '../src/index';
-import color from '../src/color';
-import { borderStyle, transform } from '../src/constants';
+import colors from '../src/color';
+import transform from '../src/transform';
 import units from '../src/units';
-import { runInDebugContext } from 'vm';
 
 document.body.innerHTML += '<div id="playground"></div>';
 
@@ -76,11 +75,10 @@ describe('', () => {
 
     it('Can use constants', () => {
       CSS({
-        color: color.red,
-        borderStyle: borderStyle.solid
+        color: colors.red
       });
 
-      expect(getSheet().cssRules[0].style.color).toBe(color.red);
+      expect(getSheet().cssRules[0].style.color).toBe(colors.red);
     });
 
     it('Can select parent', () => {
@@ -89,18 +87,18 @@ describe('', () => {
 
       const bar = CSS({
         [foo.asParent]: {
-          color: color.red,
-          borderStyle: borderStyle.solid
+          color: colors.red,
+          borderStyle: "solid",
         }
       });
 
       expect(getSheet().cssRules[2].selectorText).toBe('.class0 .class1');
-      expect(getSheet().cssRules[2].style.color).toBe(color.red);
+      expect(getSheet().cssRules[2].style.color).toBe(colors.red);
     });
 
     it('Throws on typos', () => {
       expect(() => CSS({
-        color: color.rd
+        color: colors.rd
       })).toThrow();
     });
 
@@ -118,7 +116,7 @@ describe('', () => {
 
     it('Can use arrays', () => {
       CSS({
-        border: [color.red, borderStyle.solid, units.px(1)],
+        border: [colors.red, "solid", units.px(1)],
       });
 
       expect(getSheet().cssRules[0].style.border).toBe('#ff0000 solid 1px');
@@ -148,7 +146,7 @@ describe('', () => {
     it('can inherit', () => {
       const Button = CSS({
         width: units.pct(100),
-        color: color.blue
+        color: colors.blue
       });
 
       const halfButton = CSS({
@@ -161,7 +159,7 @@ describe('', () => {
 
     it('can remove', () => {
       const Button = CSS({
-        color: color.blue
+        color: colors.blue
       });
 
       write(`<div id="test" class="${Button}"></div>`);
@@ -175,7 +173,7 @@ describe('', () => {
 
     it('can refresh', () => {
       const Button = CSS({
-        color: color.blue
+        color: colors.blue
       });
 
       write(`<div id="test" class="${Button}"></div>`);
@@ -186,7 +184,7 @@ describe('', () => {
 
       expect(document.getElementById('test').className).toBe('class1');
       expect(getSheet().cssRules[1].selectorText).toBe('.class1');
-      expect(getSheet().cssRules[1].style.color).toBe(color.blue);
+      expect(getSheet().cssRules[1].style.color).toBe(colors.blue);
     });
 
     it('convert pseudo-elements', () => {
@@ -445,7 +443,7 @@ describe('', () => {
       });
 
       const foo = CSS({
-        color: color.rgb(Coloring.red, Coloring.green, Coloring.blue),
+        color: colors.rgb(Coloring.red, Coloring.green, Coloring.blue),
       });
 
       expect(getSheet().cssRules[0].style.color).toMatch('rgb(120,10,90)');

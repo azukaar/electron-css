@@ -1,4 +1,11 @@
 {
-  "presets": ["@babel/preset-typescript", "@babel/preset-env"],
+  "presets": ["@babel/preset-typescript", 
+    [
+      "@babel/preset-env",
+      {
+        "targets": "> 2%, not dead"
+      }
+    ]
+  ],
   "plugins": ["@babel/plugin-proposal-object-rest-spread"]
 }

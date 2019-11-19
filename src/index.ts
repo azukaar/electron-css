@@ -1,7 +1,7 @@
 import { GC_COLLECT_TIME } from './config';
-import color from './color';
+import colors from './color';
 import units from './units';
-import constants from './constants';
+import transform from './transform';
 
 let testCounter = 0;
 
@@ -60,11 +60,11 @@ const subscribeDynamicCSS = (className, unparsed, cb) => {
   dynamicCssList[id].subscribe(className, cb);
 }
 
-const DynamicCSS = (defaultValues = {}) => {
+function DynamicCSS<T>(defaultValues: T): T {
   const nextId = dynamicCssList.length;
   const result = new Proxy({
     id: nextId,
-    realValues: defaultValues,
+    realValues: defaultValues || {},
     subscribed: {},
     subscribe(className, cb) {
       this.subscribed[className] = cb;
@@ -104,8 +104,10 @@ const DynamicCSS = (defaultValues = {}) => {
         return true;
       }
     });
+  
   dynamicCssList.push(result);
-  return result;
+
+  return (result as any as T);
 };
 
 const resetCSS = function () {
@@ -485,9 +487,9 @@ export {
   classes,
   setRootElement,
   setDocumentElement,
-  color,
+  colors,
   units,
   is,
-  constants,
+  transform,
   DynamicCSS
 };
