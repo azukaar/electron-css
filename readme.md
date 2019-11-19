@@ -217,14 +217,13 @@ CSS({
 You can turn this ugly code in :
 
 ```js
-import {CSS, color, constants, units} from 'electron-css';
-const {borderStyle} = constants;
+import {CSS, color, units} from 'electron-css';
 const {px} = units;
 
 CSS({
     border: [theme.borderColor, 
             this.props.large ? 5 : 2,
-            borderStyle.solid],
+            'solid'],
     width: px(this.props.width),
     color: color.darken(myColor, 0.1),
 })
@@ -276,13 +275,13 @@ const foo2 = CSS();
 Use colors constants and darken/lighten helpers to describe your theme.
 
 ```js
-import {CSS, color} from 'electron-CSS';
+import {CSS, colors} from 'electron-CSS';
 
-const mainColor = color.red;
+const mainColor = colors.red;
 
 const myCSS({
     color: mainColor,
-    border: ['1px', 'solid', color.darken(mainColor, 0.2)]
+    border: ['1px', 'solid', colors.darken(mainColor, 0.2)]
 });
 ```
 
@@ -291,12 +290,12 @@ const myCSS({
 Use colors constants and darken/lighten helpers to describe your theme.
 
 ```js
-import {CSS, color, pct} from 'electron-CSS';
+import {CSS, colors, pct} from 'electron-CSS';
 
-color.linearGradient([color.red, pct(50)], color.yellow)
+colors.linearGradient([colors.red, pct(50)], colors.yellow)
 // linear-gradient(#ff0000 50%, #ffff00)
 
-color.repeatingRadialGradient([color.closestSide, pct(60), pct(55)], color.red, color.yellow, color.black)
+colors.repeatingRadialGradient([colors.closestSide, pct(60), pct(55)], colors.red, colors.yellow, colors.black)
 // repeating-radial-gradient(closest-side at 60% 55%, #ff0000, #ffff00, #000000)
 ```
 
@@ -305,10 +304,10 @@ color.repeatingRadialGradient([color.closestSide, pct(60), pct(55)], color.red, 
 Instead of always concataining units, use the units helpers : 
 
 ```js
-import {CSS, units} from 'electron-CSS';
+import {CSS, units, colors} from 'electron-CSS';
 const {pct, px} = units;
 
-const mainColor = color.red;
+const mainColor = colors.red;
 
 const myCSS({
     width: px(1000), // 1000px
@@ -316,23 +315,6 @@ const myCSS({
 });
 ```
 
-### Constants
-
-Avoid typo and errors by using provided constant for every CSS rules.
-
-```js
-import {CSS, constants} from 'electron-CSS';
-const {margin, padding, borderStyle} = constants;
-
-const mainColor = color.red;
-
-const myCSS({
-    margin: margin.aut, // margin: aut doesnt exist, and will throw an error in your console !
-    padding: padding.inherit
-    borderStyle: borderStyle.solid
-
-});
-```
 
 ## Snapshot tests
 

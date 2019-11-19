@@ -1,0 +1,25 @@
+const transform = {
+  matrix: (...content) => `matrix(${content.join(',')})`,
+  matrix3d: (...content) => `matrix3d(${content.join(',')})`,
+  translate: (x, y = 0) => `translate(${x}, ${y})`,
+  translate3d: (x, y = 0, z = 0) => `translate3d(${x}, ${y}, ${z})`,
+  translateX: (x) => `translateX(${x})`,
+  translateY: (y) => `translateY(${y})`,
+  translateZ: (z) => `translateZ(${z})`,
+  scale: (x, y = 0) => `scale(${x}, ${y})`,
+  scale3d: (x, y = 0, z = 0) => `scale3d(${x}, ${y}, ${z})`,
+  scaleX: (x) => `scaleX(${x})`,
+  scaleY: (y) => `scaleY(${y})`,
+  scaleZ: (z) => `scaleZ(${z})`,
+  rotate: (x, y = 0) => `rotate(${x}, ${y})`,
+  rotate3d: (x, y = 0, z = 0) => `rotate3d(${x}, ${y}, ${z})`,
+  rotateX: (x) => `rotateX(${x})`,
+  rotateY: (y) => `rotateY(${y})`,
+  rotateZ: (z) => `rotateZ(${z})`,
+  skew: (x, y = 0) => `skew(${x}, ${y})`,
+  skewY: (y) => `skewY(${y})`,
+  skewZ: (z) => `skewZ(${z})`,
+  perspective: (n) => `perspective(${n})`,
+}
+
+export default transform;
