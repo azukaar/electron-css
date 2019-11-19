@@ -61,6 +61,12 @@ const subscribeDynamicCSS = (className, unparsed, cb) => {
 }
 
 function DynamicCSS<T>(defaultValues: T): T {
+  type dynamicObject = T & {
+    subscribe: Function,
+    refresh: Function,
+    use: Function,
+    inject: Function
+  };
   const nextId = dynamicCssList.length;
   const result = new Proxy({
     id: nextId,
@@ -107,7 +113,7 @@ function DynamicCSS<T>(defaultValues: T): T {
   
   dynamicCssList.push(result);
 
-  return (result as any as T);
+  return (result as any as dynamicObject);
 };
 
 const resetCSS = function () {
